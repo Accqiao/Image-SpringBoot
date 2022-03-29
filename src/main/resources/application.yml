@@ -1,0 +1,42 @@
+server:
+  port: 8088
+
+
+spring:
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 10MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/image?serverTimezone=GMT
+    username: root
+    password: 106320
+  mvc:
+    #文件的访问路径 http://localhost:8088/image/123.png
+    static-path-pattern: /image/**
+  web:
+    resources:
+      #文件的保存路径，classpath 指resource文件夹以下
+      static-locations: classpath:Image
+#      static-locations: file:E:/StuProject/IDEAProject/SpringBoot-Image/Image
+
+
+
+#multipart:
+#  enabled: true
+#  #单个文件大小
+#  maxFileSize: 10MB
+#  #单次请求文件总和大小
+#  maxRequestSize: 100MB
+
+mybatis-plus:
+  # 扫描 resoueces下的mapper.xml文件
+  mapper-locations:
+    - classpath*:mapper/*.xml
+  # 实体类存放位置，好像不写也行
+  type-aliases-package: org.project.image.entity
+  # # 打印sql日志
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

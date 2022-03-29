@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.image.mapper.InterestMapper">
+
+    <resultMap id="BaseResultMap" type="org.project.image.entity.Interest">
+            <id property="id" column="id" jdbcType="OTHER"/>
+            <result property="uid" column="uid" jdbcType="VARCHAR"/>
+            <result property="tag" column="tag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,uid,tag
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from interest
+        where  id = #{id,jdbcType=OTHER} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from interest
+        where  id = #{id,jdbcType=OTHER} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.project.image.entity.Interest" useGeneratedKeys="true">
+        insert into interest
+        ( id,uid,tag
+        )
+        values (#{id,jdbcType=OTHER},#{uid,jdbcType=VARCHAR},#{tag,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.project.image.entity.Interest" useGeneratedKeys="true">
+        insert into interest
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="uid != null">uid,</if>
+                <if test="tag != null">tag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=OTHER},</if>
+                <if test="uid != null">#{uid,jdbcType=VARCHAR},</if>
+                <if test="tag != null">#{tag,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.project.image.entity.Interest">
+        update interest
+        <set>
+                <if test="uid != null">
+                    uid = #{uid,jdbcType=VARCHAR},
+                </if>
+                <if test="tag != null">
+                    tag = #{tag,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=OTHER} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.project.image.entity.Interest">
+        update interest
+        set 
+            uid =  #{uid,jdbcType=VARCHAR},
+            tag =  #{tag,jdbcType=VARCHAR}
+        where   id = #{id,jdbcType=OTHER} 
+    </update>
+</mapper>
