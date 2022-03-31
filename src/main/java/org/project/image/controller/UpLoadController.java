@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/upload")
@@ -88,15 +89,18 @@ public class UpLoadController {
             String newPath = tempPath.replace("temp","image");
             MoveFile moveFile = new MoveFile();
             Boolean resMove = moveFile.toMoveFile(path,tempPath,newPath);
+            System.out.println("1、移动图片："+ tempPath);
             if(resMove){//图片移动成功
                 image.setHref(tempPath.replace("temp","image"));
                 int resImg = imageService.insert(image);
                 if (resImg == 1){//图片数据库添加成功
+                    System.out.println("2、添加数据库成功");
                     imageTagService.insertList(tags,hid);//添加标签
-
+                    System.out.println("3、添加标签");
                     resultObj.setMessage("上传成功！");
                     resultObj.setResult(true);
                 }else {//移动回去
+                    System.out.println("4、数据库失败，返回图片："+ newPath);
                     moveFile.toMoveFile(path,newPath,tempPath);
                     resultObj.setResult(false);
                     resultObj.setMessage("保存异常，请稍后再试！");
@@ -121,22 +125,24 @@ public class UpLoadController {
     @RequestMapping("/image")
     public ResultObject upload(@RequestParam("file") MultipartFile multipartFile){
         ResultObject resultObj = new ResultObject();
-        //文件名
-        String fileName = multipartFile.getOriginalFilename();
-        //后缀
-        String fileEnd = fileName.substring(fileName.lastIndexOf("."));
-        //修改文件名，确保文件名唯一,UUID.randomUUID()数字较长
-        //有这么长/例如：1DAF9E46-26F6-4F52-BBA5-422FD0E09270
-        //String newFileName = "img"+UUID.randomUUID() + fileEnd;
-        //获取系统当前时间System.currentTimeMillis()当前的毫秒
-        String newFileName = "img"+System.currentTimeMillis() + fileEnd;
-        String tempPath = "temp/" + newFileName;
-        String newPath = path + tempPath;
         try {
+            //文件名
+            String fileName = multipartFile.getOriginalFilename();
+            //后缀
+            String fileEnd = fileName.substring(fileName.lastIndexOf("."));
+            //修改文件名，确保文件名唯一,UUID.randomUUID()数字较长
+            //有这么长/例如：1DAF9E46-26F6-4F52-BBA5-422FD0E09270
+            String newFileName = UUID.randomUUID() + fileEnd;
+            //获取系统当前时间System.currentTimeMillis()当前的毫秒
+            //String newFileName = "img"+System.currentTimeMillis() + fileEnd;
+            String tempPath = "temp/" + newFileName;
+            String newPath = path + tempPath;
+
             //创建目标文件的地址
             FileOutputStream fileOutputStream = new FileOutputStream(newPath);
             //复制文件//输入流
             FileCopyUtils.copy(multipartFile.getInputStream(),fileOutputStream);
+            fileOutputStream.close();
 
             return getImageInfo(tempPath);
         } catch (IOException e) {
@@ -158,7 +164,9 @@ public class UpLoadController {
         ResultObject resultObj = new ResultObject();
         String path = OPath + tempPath;
         try {
-            BufferedImage image = ImageIO.read( new FileInputStream(path) );
+            FileInputStream fileInputStream = new  FileInputStream(path);
+            BufferedImage image = ImageIO.read( fileInputStream);
+            fileInputStream.close();
             DHash hashClass = new DHash();
             String hash = hashClass.getDHash(image);
             if(!checkHash(hash)){
@@ -166,13 +174,12 @@ public class UpLoadController {
                 resultObj.setMessage("已存在相似图片，请勿重复上传！");
                 return resultObj;
             }
+            System.out.println("新的图片已上传："+ tempPath);
             Color colorClass = new Color();
             String color = colorClass.getAvgRGB(image);
             int width = image.getWidth();
             int height = image.getHeight();
-
             List<Tags> tagsList = tagsService.selectAllByLevelTags("2");
-            System.out.println(tagsList);
             JSONObject jobj = new JSONObject();
             jobj.put("color",color);
             jobj.put("path",tempPath);
@@ -218,7 +225,6 @@ public class UpLoadController {
      * @return
      */
     public boolean checkHash(String hash){
-        System.out.println("-------------------------checkHash()----------------------");
         Image isOk = imageService.selectByPrimaryKey(hash);
         if(isOk == null){
             //没有查询到同一hash，可以插入

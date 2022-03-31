@@ -29,4 +29,14 @@ public class ImageTagImpl implements ImageTagService {
             mapper.insert(imagetags);
         }
     }
+
+    @Override
+    public List<Imagetags> selectByHid(String hid) {
+        return mapper.selectByHid(hid);
+    }
+
+    @Override
+    public int deleteByPrimaryKey(String hid, String tag) {
+        return mapper.deleteByPrimaryKey(hid, tag);
+    }
 }

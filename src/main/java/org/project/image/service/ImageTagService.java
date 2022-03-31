@@ -15,4 +15,8 @@ public interface ImageTagService {
 
     void insertList(List<String> taglist ,String hid);
 
+    List<Imagetags> selectByHid(String hid);
+
+    int deleteByPrimaryKey(String hid,String tag);
+
 }

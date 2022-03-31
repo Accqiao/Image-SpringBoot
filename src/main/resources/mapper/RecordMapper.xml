@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.image.mapper.RecordMapper">
+
+    <resultMap id="BaseResultMap" type="org.project.image.entity.Record">
+            <id property="uid" column="uid" jdbcType="VARCHAR"/>
+            <id property="hid" column="hid" jdbcType="VARCHAR"/>
+            <id property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        uid,hid,type,
+        createTime
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from record
+        where  uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByAllKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from record
+        where  uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR} AND type = #{type,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from record
+        where  uid = #{uid,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from record
+        where  uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR} AND type = #{type,jdbcType=VARCHAR} 
+    </delete>
+
+    <insert id="insert">
+        insert into record
+        ( uid,hid,type
+        values (#{uid,jdbcType=VARCHAR},#{hid,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR})
+    </insert>
+
+
+
+
+
+    <insert id="insertSelective">
+        insert into record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="uid != null">uid,</if>
+                <if test="hid != null">hid,</if>
+                <if test="type != null">type,</if>
+                <if test="createtime != null">createTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="uid != null">#{uid,jdbcType=VARCHAR},</if>
+                <if test="hid != null">#{hid,jdbcType=VARCHAR},</if>
+                <if test="type != null">#{type,jdbcType=VARCHAR},</if>
+                <if test="createtime != null">#{createtime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.project.image.entity.Record">
+        update record
+        <set>
+                <if test="createtime != null">
+                    createTime = #{createtime,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR} AND type = #{type,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.project.image.entity.Record">
+        update record
+        set 
+            createTime =  #{createtime,jdbcType=TIMESTAMP}
+        where   uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR} AND type = #{type,jdbcType=VARCHAR} 
+    </update>
+</mapper>

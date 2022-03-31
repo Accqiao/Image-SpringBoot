@@ -15,18 +15,6 @@
         hid,tag,changeNum,
         state
     </sql>
-
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from imagetags
-        where  hid = #{hid,jdbcType=VARCHAR} AND tag = #{tag,jdbcType=VARCHAR} 
-    </select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete from imagetags
-        where  hid = #{hid,jdbcType=VARCHAR} AND tag = #{tag,jdbcType=VARCHAR} 
-    </delete>
     <insert id="insert">
         insert into imagetags
         ( hid,tag,changeNum
@@ -34,6 +22,22 @@
         values (#{hid,jdbcType=VARCHAR},#{tag,jdbcType=VARCHAR},#{changenum,jdbcType=INTEGER}
         ,#{state,jdbcType=VARCHAR})
     </insert>
+    <select id="selectByHid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from imagetags
+        where  hid = #{hid,jdbcType=VARCHAR} AND state = 'yes'
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from imagetags
+        where  hid = #{hid,jdbcType=VARCHAR} AND tag = #{tag,jdbcType=VARCHAR}
+    </delete>
+
+
+
+
+
     <insert id="insertSelective">
         insert into imagetags
         <trim prefix="(" suffix=")" suffixOverrides=",">

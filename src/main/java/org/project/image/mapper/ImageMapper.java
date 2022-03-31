@@ -2,6 +2,8 @@ package org.project.image.mapper;
 
 import org.project.image.entity.Image;
 
+import java.util.List;
+
 /**
 * @author Accqiao
 * @description 针对表【image】的数据库操作Mapper
@@ -14,7 +16,7 @@ public interface ImageMapper {
 
     Image selectByPrimaryKey(String id);
 
-
+    List<Image> selectByRandom(int num);
 
 
     int deleteByPrimaryKey(Long id);

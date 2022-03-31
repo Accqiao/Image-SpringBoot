@@ -8,6 +8,7 @@ import org.project.image.service.ImageService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class ImageImpl implements ImageService {
@@ -23,5 +24,10 @@ public class ImageImpl implements ImageService {
     @Override
     public int insert(Image record) {
         return mapper.insert(record);
+    }
+
+    @Override
+    public List<Image> selectByRandom(int num) {
+        return mapper.selectByRandom(num);
     }
 }

@@ -7,27 +7,29 @@ public class MoveFile {
     public boolean toMoveFile(String head ,String oldPath ,String newPath){
         String fromPath = head + oldPath;
         String toPath = head + newPath;
-        System.out.println(head+" "+oldPath+" "+newPath);
+        System.out.println("MOVE:从"+oldPath+" 到"+newPath);
         try {
             File file = new File(fromPath);
             if (file.isFile()){
 //                File toFile=new File(toPath+"\\"+file.getName());
                 File toFile=new File(toPath);
                 if (toFile.exists()){
-                    System.out.println("文件已存在");
-                    return false;
+                    System.out.println("MOVE: 文件已存在");
                 }
                 else{
-                    file.renameTo(toFile);
-                    System.out.println("移动文件成功");
-                    return true;
+                    Boolean isOK = file.renameTo(toFile);
+                    if(isOK){
+                        System.out.println("MOVE: 移动文件成功");
+                        return true;
+                    }else {
+                        System.out.println("MOVE: 移动失败"+isOK);
+                    }
                 }
-            }{
-                return false;
             }
         }catch (Exception e){
             e.printStackTrace();
-            return false;
+            System.out.println("MOVE: 异常错误");
         }
+        return false;
     }
 }

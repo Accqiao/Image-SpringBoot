@@ -30,7 +30,7 @@ public class TagsController {
         resObject.setResult(true);
         resObject.setMessage("查询成功");
         resObject.setData(tagsList);
-        System.out.println(tagsList);
+//        System.out.println(tagsList);
         return resObject;
 
     }
