@@ -1,12 +1,7 @@
-package org.project.image.controller.ImageController;
+package org.project.image.controller.Image;
 
-import org.project.image.entity.ResultObject;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 public class DHash {
     /**

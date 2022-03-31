@@ -1,4 +1,4 @@
-package org.project.image.controller.ImageController;
+package org.project.image.controller.Image;
 
 //数据字典
 

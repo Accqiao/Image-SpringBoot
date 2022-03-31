@@ -1,4 +1,4 @@
-package org.project.image.controller.ImageController;
+package org.project.image.controller.Image;
 
 import com.huaweicloud.sdk.core.auth.BasicCredentials;
 import com.huaweicloud.sdk.core.auth.ICredential;

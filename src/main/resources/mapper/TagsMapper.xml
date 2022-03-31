@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.image.mapper.TagsMapper">
+
+    <resultMap id="BaseResultMap" type="org.project.image.entity.Tags">
+            <id property="tag" column="tag" jdbcType="VARCHAR"/>
+            <result property="level" column="level" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="state" column="state" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        tag,level,description,
+        state
+    </sql>
+
+
+    <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tags
+    </select>
+    <select id="selectAllByLevelTags" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tags
+        where  level = #{level,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tags
+        where  tag = #{tag,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from tags
+        where  tag = #{tag,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert" keyColumn="tag" keyProperty="tag" parameterType="org.project.image.entity.Tags" useGeneratedKeys="true">
+        insert into tags
+        ( tag,level,description
+        ,state)
+        values (#{tag,jdbcType=VARCHAR},#{level,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR}
+        ,#{state,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="tag" keyProperty="tag" parameterType="org.project.image.entity.Tags" useGeneratedKeys="true">
+        insert into tags
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="tag != null">tag,</if>
+                <if test="level != null">level,</if>
+                <if test="description != null">description,</if>
+                <if test="state != null">state,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="tag != null">#{tag,jdbcType=VARCHAR},</if>
+                <if test="level != null">#{level,jdbcType=VARCHAR},</if>
+                <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+                <if test="state != null">#{state,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.project.image.entity.Tags">
+        update tags
+        <set>
+                <if test="level != null">
+                    level = #{level,jdbcType=VARCHAR},
+                </if>
+                <if test="description != null">
+                    description = #{description,jdbcType=VARCHAR},
+                </if>
+                <if test="state != null">
+                    state = #{state,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   tag = #{tag,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.project.image.entity.Tags">
+        update tags
+        set 
+            level =  #{level,jdbcType=VARCHAR},
+            description =  #{description,jdbcType=VARCHAR},
+            state =  #{state,jdbcType=VARCHAR}
+        where   tag = #{tag,jdbcType=VARCHAR} 
+    </update>
+</mapper>

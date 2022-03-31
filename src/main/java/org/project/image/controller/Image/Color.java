@@ -1,14 +1,8 @@
-package org.project.image.controller.ImageController;
+package org.project.image.controller.Image;
 
 import cn.hutool.core.img.ImgUtil;
-import org.project.image.entity.ResultObject;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
 
 
 public class Color {
