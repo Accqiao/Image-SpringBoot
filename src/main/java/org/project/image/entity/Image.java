@@ -46,7 +46,7 @@ public class Image implements Serializable {
     /**
      * 浏览次数
      */
-    private Integer trialnum;
+    private Integer trailnum;
 
     /**
      * 喜欢次数
@@ -171,15 +171,15 @@ public class Image implements Serializable {
     /**
      * 浏览次数
      */
-    public Integer getTrialnum() {
-        return trialnum;
+    public Integer getTrailnum() {
+        return trailnum;
     }
 
     /**
      * 浏览次数
      */
-    public void setTrialnum(Integer trialnum) {
-        this.trialnum = trialnum;
+    public void setTrailnum(Integer trailnum) {
+        this.trailnum = trailnum;
     }
 
     /**
@@ -257,7 +257,7 @@ public class Image implements Serializable {
             && (this.getDescription() == null ? other.getDescription() == null : this.getDescription().equals(other.getDescription()))
             && (this.getWidth() == null ? other.getWidth() == null : this.getWidth().equals(other.getWidth()))
             && (this.getHeight() == null ? other.getHeight() == null : this.getHeight().equals(other.getHeight()))
-            && (this.getTrialnum() == null ? other.getTrialnum() == null : this.getTrialnum().equals(other.getTrialnum()))
+            && (this.getTrailnum() == null ? other.getTrailnum() == null : this.getTrailnum().equals(other.getTrailnum()))
             && (this.getLikenum() == null ? other.getLikenum() == null : this.getLikenum().equals(other.getLikenum()))
             && (this.getState() == null ? other.getState() == null : this.getState().equals(other.getState()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
@@ -275,7 +275,7 @@ public class Image implements Serializable {
         result = prime * result + ((getDescription() == null) ? 0 : getDescription().hashCode());
         result = prime * result + ((getWidth() == null) ? 0 : getWidth().hashCode());
         result = prime * result + ((getHeight() == null) ? 0 : getHeight().hashCode());
-        result = prime * result + ((getTrialnum() == null) ? 0 : getTrialnum().hashCode());
+        result = prime * result + ((getTrailnum() == null) ? 0 : getTrailnum().hashCode());
         result = prime * result + ((getLikenum() == null) ? 0 : getLikenum().hashCode());
         result = prime * result + ((getState() == null) ? 0 : getState().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
@@ -296,7 +296,7 @@ public class Image implements Serializable {
         sb.append(", description=").append(description);
         sb.append(", width=").append(width);
         sb.append(", height=").append(height);
-        sb.append(", trialnum=").append(trialnum);
+        sb.append(", trailnum=").append(trailnum);
         sb.append(", likenum=").append(likenum);
         sb.append(", state=").append(state);
         sb.append(", updatetime=").append(updatetime);

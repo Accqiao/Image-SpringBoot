@@ -1,13 +1,11 @@
 package org.project.image.controller;
 
-import com.alibaba.fastjson.JSONArray;
+
 import com.alibaba.fastjson.JSONObject;
 import org.project.image.controller.Image.Color;
 import org.project.image.controller.Image.DHash;
-import org.project.image.controller.Image.Main;
 import org.project.image.controller.Image.MoveFile;
 import org.project.image.entity.Image;
-import org.project.image.entity.Password;
 import org.project.image.entity.ResultObject;
 import org.project.image.entity.Tags;
 import org.project.image.service.ImageService;
@@ -72,7 +70,7 @@ public class UpLoadController {
 
             //默认值
 
-            image.setTrialnum(0);
+            image.setTrailnum(0);
             image.setLikenum(0);
             image.setState("yes");
 
@@ -155,7 +153,7 @@ public class UpLoadController {
     }
 
     /**
-     * 确定上传图片的信息，确定哈希唯一
+     * 确定上传图片的信息，确定哈希，使图片唯一
      * @param tempPath
      * @return
      */

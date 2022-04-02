@@ -5,6 +5,7 @@ import org.project.image.entity.Image;
 import org.project.image.entity.ResultObject;
 import org.project.image.service.*;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ public class ImageController {
     @Resource
     private ImageTagService imageTagService;
     @Resource
-    private RecordService recordService;
+    private ImageLikeService imageLikeService;
 
     /**
      * 随机获取一定数量图片和附属信息
@@ -64,7 +65,7 @@ public class ImageController {
             jobj.put("image",image);
             jobj.put("user",userService.selectByPrimaryKey(image.getUid()));
             jobj.put("tags",imageTagService.selectByHid(image.getHid()));
-            jobj.put("record",recordService.deleteByPrimaryKey(image.getHid(),uid));
+            jobj.put("record",imageLikeService.selectByPrimaryKey(uid,image.getHid()));
 
             obj.add(jobj);
         }
@@ -73,6 +74,36 @@ public class ImageController {
         resObject.setData(obj);
         return resObject;
     }
+
+    @RequestMapping("onetrail")
+    public void oneTrail(@RequestBody String jstr){
+        JSONObject jobj = JSONObject.parseObject(jstr);
+        String hid = jobj.get("hid").toString();
+        trailNumAddOne(hid);
+    }
+//    @RequestMapping("onelike")
+//    public void oneLike(@RequestBody String jstr){
+//        JSONObject jobj = JSONObject.parseObject(jstr);
+//        String hid = jobj.get("hid").toString();
+//        likeNumAddOne(hid);
+//    }
+
+
+
+
+
+    public void trailNumAddOne(String hid){
+        imageService.trailNumAddOne(hid);
+
+    }
+    public void likeNumAddOne(String hid){
+        imageService.likeNumAddOne(hid);
+    }
+    public void likeNumSubOne(String hid){
+        imageService.likeNumSubOne(hid);
+    }
+
+
 
 
 

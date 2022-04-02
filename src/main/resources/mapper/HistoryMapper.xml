@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.image.mapper.HistoryMapper">
+
+    <resultMap id="BaseResultMap" type="org.project.image.entity.History">
+            <id property="uid" column="uid" jdbcType="VARCHAR"/>
+            <id property="hid" column="hid" jdbcType="VARCHAR"/>
+            <result property="num" column="num" jdbcType="INTEGER"/>
+            <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        uid,hid,num,
+        updateTime,createTime
+    </sql>
+
+    <update id="insertOrAddOne" parameterType="org.project.image.entity.History">
+        insert into history
+        ( uid,hid,num )
+        values (#{uid,jdbcType=VARCHAR},#{hid,jdbcType=VARCHAR}, 1 )
+        ON DUPLICATE KEY UPDATE
+        num = num + 1
+    </update>
+
+
+    <insert id="insert">
+        insert into history
+        ( uid,hid,num
+        ,updateTime,createTime)
+        values (#{uid,jdbcType=VARCHAR},#{hid,jdbcType=VARCHAR},#{num,jdbcType=INTEGER}
+        ,#{updatetime,jdbcType=TIMESTAMP},#{createtime,jdbcType=TIMESTAMP})
+    </insert>
+
+
+
+
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from history
+        where  uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from history
+        where  uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR} 
+    </delete>
+
+    <insert id="insertSelective">
+        insert into history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="uid != null">uid,</if>
+                <if test="hid != null">hid,</if>
+                <if test="num != null">num,</if>
+                <if test="updatetime != null">updateTime,</if>
+                <if test="createtime != null">createTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="uid != null">#{uid,jdbcType=VARCHAR},</if>
+                <if test="hid != null">#{hid,jdbcType=VARCHAR},</if>
+                <if test="num != null">#{num,jdbcType=INTEGER},</if>
+                <if test="updatetime != null">#{updatetime,jdbcType=TIMESTAMP},</if>
+                <if test="createtime != null">#{createtime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.project.image.entity.History">
+        update history
+        <set>
+                <if test="num != null">
+                    num = #{num,jdbcType=INTEGER},
+                </if>
+                <if test="updatetime != null">
+                    updateTime = #{updatetime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="createtime != null">
+                    createTime = #{createtime,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.project.image.entity.History">
+        update history
+        set 
+            num =  #{num,jdbcType=INTEGER},
+            updateTime =  #{updatetime,jdbcType=TIMESTAMP},
+            createTime =  #{createtime,jdbcType=TIMESTAMP}
+        where   uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR} 
+    </update>
+</mapper>

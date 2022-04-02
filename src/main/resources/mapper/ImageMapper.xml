@@ -12,7 +12,7 @@
             <result property="description" column="description" jdbcType="VARCHAR"/>
             <result property="width" column="width" jdbcType="INTEGER"/>
             <result property="height" column="height" jdbcType="INTEGER"/>
-            <result property="trialnum" column="trialNum" jdbcType="INTEGER"/>
+            <result property="trailnum" column="trailNum" jdbcType="INTEGER"/>
             <result property="likenum" column="likeNum" jdbcType="INTEGER"/>
             <result property="state" column="state" jdbcType="VARCHAR"/>
             <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
@@ -22,16 +22,11 @@
     <sql id="Base_Column_List">
         hid,uid,title,
         href,description,width,
-        height,trialNum,likeNum,
+        height,trailNum,likeNum,
         state,updateTime,createTime
     </sql>
 
-    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from image
-        where  hid = #{hid,jdbcType=VARCHAR} 
-    </select>
+
 
 
     <select id="selectByRandom" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -43,12 +38,44 @@
     </select>
 
 
+    <update id="trailNumAddOne" parameterType="java.lang.String">
+        update image
+        set
+            trailNum = trailNum + 1
+        where hid = #{hid,jdbcType=VARCHAR}
+    </update>
+
+    <update id="likeNumAddOne" parameterType="java.lang.String">
+        update image
+        set
+            trailNum = trailNum + 1,
+            likeNum = likeNum + 1
+        where   hid = #{hid,jdbcType=VARCHAR}
+    </update>
+
+    <update id="likeNumSubOne" parameterType="java.lang.String">
+        update image
+        set
+            likeNum = likeNum - 1
+        where   hid = #{hid,jdbcType=VARCHAR}
+    </update>
 
 
 
 
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+
+
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from image
+        where  hid = #{hid,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from image
         where  hid = #{hid,jdbcType=VARCHAR} 
     </delete>
@@ -56,15 +83,17 @@
         insert into image
         ( hid,uid,title
         ,href,description,width
-        ,height,trialNum,likeNum
-        ,state
-        )
+        ,height,trailNum,likeNum
+        ,state)
         values (#{hid,jdbcType=VARCHAR},#{uid,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR}
         ,#{href,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{width,jdbcType=INTEGER}
-        ,#{height,jdbcType=INTEGER},#{trialnum,jdbcType=INTEGER},#{likenum,jdbcType=INTEGER}
-        ,#{state,jdbcType=VARCHAR}
-        )
+        ,#{height,jdbcType=INTEGER},#{trailnum,jdbcType=INTEGER},#{likenum,jdbcType=INTEGER}
+        ,#{state,jdbcType=VARCHAR})
     </insert>
+
+
+
+
     <insert id="insertSelective" keyColumn="hid" keyProperty="hid" parameterType="org.project.image.entity.Image" useGeneratedKeys="true">
         insert into image
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -75,7 +104,7 @@
                 <if test="description != null">description,</if>
                 <if test="width != null">width,</if>
                 <if test="height != null">height,</if>
-                <if test="trialnum != null">trialNum,</if>
+                <if test="trailnum != null">trailNum,</if>
                 <if test="likenum != null">likeNum,</if>
                 <if test="state != null">state,</if>
                 <if test="updatetime != null">updateTime,</if>
@@ -89,7 +118,7 @@
                 <if test="description != null">#{description,jdbcType=VARCHAR},</if>
                 <if test="width != null">#{width,jdbcType=INTEGER},</if>
                 <if test="height != null">#{height,jdbcType=INTEGER},</if>
-                <if test="trialnum != null">#{trialnum,jdbcType=INTEGER},</if>
+                <if test="trailnum != null">#{trailnum,jdbcType=INTEGER},</if>
                 <if test="likenum != null">#{likenum,jdbcType=INTEGER},</if>
                 <if test="state != null">#{state,jdbcType=VARCHAR},</if>
                 <if test="updatetime != null">#{updatetime,jdbcType=TIMESTAMP},</if>
@@ -117,8 +146,8 @@
                 <if test="height != null">
                     height = #{height,jdbcType=INTEGER},
                 </if>
-                <if test="trialnum != null">
-                    trialNum = #{trialnum,jdbcType=INTEGER},
+                <if test="trailnum != null">
+                    trailNum = #{trailnum,jdbcType=INTEGER},
                 </if>
                 <if test="likenum != null">
                     likeNum = #{likenum,jdbcType=INTEGER},
@@ -144,7 +173,7 @@
             description =  #{description,jdbcType=VARCHAR},
             width =  #{width,jdbcType=INTEGER},
             height =  #{height,jdbcType=INTEGER},
-            trialNum =  #{trialnum,jdbcType=INTEGER},
+            trailNum =  #{trailnum,jdbcType=INTEGER},
             likeNum =  #{likenum,jdbcType=INTEGER},
             state =  #{state,jdbcType=VARCHAR},
             updateTime =  #{updatetime,jdbcType=TIMESTAMP},

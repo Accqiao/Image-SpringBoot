@@ -1,9 +1,7 @@
 package org.project.image.service.impl;
 
 import org.project.image.entity.Image;
-import org.project.image.entity.Imagetags;
 import org.project.image.mapper.ImageMapper;
-import org.project.image.mapper.TagsMapper;
 import org.project.image.service.ImageService;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +27,21 @@ public class ImageImpl implements ImageService {
     @Override
     public List<Image> selectByRandom(int num) {
         return mapper.selectByRandom(num);
+    }
+
+    @Override
+    public void trailNumAddOne(String hid) {
+        mapper.trailNumAddOne(hid);
+    }
+
+    @Override
+    public void likeNumAddOne(String hid) {
+
+        mapper.likeNumAddOne(hid);
+    }
+
+    @Override
+    public void likeNumSubOne(String hid) {
+        mapper.likeNumSubOne(hid);
     }
 }

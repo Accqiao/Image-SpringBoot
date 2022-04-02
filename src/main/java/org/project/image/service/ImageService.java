@@ -13,5 +13,10 @@ public interface ImageService {
 
     List<Image> selectByRandom(int num);
 
+    void trailNumAddOne(String hid);
 
+    void likeNumAddOne(String hid);
+
+
+    void likeNumSubOne(String hid);
 }
