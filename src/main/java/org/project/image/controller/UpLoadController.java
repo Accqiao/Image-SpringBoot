@@ -72,6 +72,7 @@ public class UpLoadController {
 
             image.setTrailnum(0);
             image.setLikenum(0);
+            image.setScore(0);
             image.setState("yes");
 
 

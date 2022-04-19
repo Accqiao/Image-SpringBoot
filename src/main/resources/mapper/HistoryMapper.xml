@@ -34,12 +34,27 @@
         ,#{updatetime,jdbcType=TIMESTAMP},#{createtime,jdbcType=TIMESTAMP})
     </insert>
 
+    <select id="selectByUid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from history
+        where  uid = #{uid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByUidByTime" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from history
+        where  uid = #{uid,jdbcType=VARCHAR}
+        order by updateTime desc
+    </select>
 
 
 
 
 
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from history

@@ -14,6 +14,7 @@
             <result property="height" column="height" jdbcType="INTEGER"/>
             <result property="trailnum" column="trailNum" jdbcType="INTEGER"/>
             <result property="likenum" column="likeNum" jdbcType="INTEGER"/>
+            <result property="score" column="score" jdbcType="INTEGER"/>
             <result property="state" column="state" jdbcType="VARCHAR"/>
             <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
@@ -22,7 +23,7 @@
     <sql id="Base_Column_List">
         hid,uid,title,
         href,description,width,
-        height,trailNum,likeNum,
+        height,trailNum,likeNum,score,
         state,updateTime,createTime
     </sql>
 
@@ -37,11 +38,56 @@
         order by rand() limit #{num}
     </select>
 
+    <select id="selectByScore" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from image
+        where state = 'yes'
+        order by score desc limit #{begin},#{num}
+    </select>
+
+    <select id="selectByTrail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from image
+        where state = 'yes'
+        order by trailNum desc limit #{begin},#{num}
+    </select>
+    <select id="selectByLike" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from image
+        where state = 'yes'
+        order by likeNum desc limit #{begin},#{num}
+    </select>
+
+    <select id="selectByUidByTime" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from image
+        where state = 'yes' and uid = #{uid,jdbcType=VARCHAR}
+        order by updateTime desc
+    </select>
+
+    <select id="selectByScoreByPc" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from image
+        where width/height > 4/3
+        order by score desc limit #{begin},#{num}
+    </select>
+
+
+
+
+
+
 
     <update id="trailNumAddOne" parameterType="java.lang.String">
         update image
         set
-            trailNum = trailNum + 1
+            trailNum = trailNum + 1,
+            score = score + 1
         where hid = #{hid,jdbcType=VARCHAR}
     </update>
 
@@ -49,14 +95,16 @@
         update image
         set
             trailNum = trailNum + 1,
-            likeNum = likeNum + 1
+            likeNum = likeNum + 1,
+            score = score + 11
         where   hid = #{hid,jdbcType=VARCHAR}
     </update>
 
     <update id="likeNumSubOne" parameterType="java.lang.String">
         update image
         set
-            likeNum = likeNum - 1
+            likeNum = likeNum - 1,
+            score = score - 5
         where   hid = #{hid,jdbcType=VARCHAR}
     </update>
 
@@ -83,11 +131,12 @@
         insert into image
         ( hid,uid,title
         ,href,description,width
-        ,height,trailNum,likeNum
+        ,height,trailNum,likeNum,score
         ,state)
         values (#{hid,jdbcType=VARCHAR},#{uid,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR}
         ,#{href,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{width,jdbcType=INTEGER}
-        ,#{height,jdbcType=INTEGER},#{trailnum,jdbcType=INTEGER},#{likenum,jdbcType=INTEGER}
+        ,#{height,jdbcType=INTEGER}
+        ,#{trailnum,jdbcType=INTEGER},#{likenum,jdbcType=INTEGER},#{score,jdbcType=INTEGER}
         ,#{state,jdbcType=VARCHAR})
     </insert>
 

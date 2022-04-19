@@ -7,6 +7,8 @@ import org.project.image.service.ImageLikeService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+
 @Service
 public class ImageLikeImpl implements ImageLikeService {
     @Resource
@@ -25,5 +27,10 @@ public class ImageLikeImpl implements ImageLikeService {
     @Override
     public Imagelike selectByPrimaryKey(String uid, String hid) {
         return mapper.selectByPrimaryKey(uid, hid);
+    }
+
+    @Override
+    public List<Imagelike> selectByUidByTime(String uid) {
+        return mapper.selectByUidByTime(uid);
     }
 }

@@ -2,6 +2,8 @@ package org.project.image.mapper;
 
 import org.project.image.entity.Imagelike;
 
+import java.util.List;
+
 /**
 * @author Accqiao
 * @description 针对表【imagelike】的数据库操作Mapper
@@ -16,6 +18,8 @@ public interface ImagelikeMapper {
 
     Imagelike selectByPrimaryKey(String uid,String hid);
 
+
+    List<Imagelike> selectByUidByTime(String uid);
 
 
 

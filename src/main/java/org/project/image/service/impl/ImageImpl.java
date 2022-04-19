@@ -30,6 +30,33 @@ public class ImageImpl implements ImageService {
     }
 
     @Override
+    public List<Image> selectByScore(int begin, int num) {
+        return mapper.selectByScore(begin, num);
+    }
+
+    @Override
+    public List<Image> selectByTrail(int begin, int num) {
+        return mapper.selectByTrail(begin, num);
+    }
+
+    @Override
+    public List<Image> selectByLike(int begin, int num) {
+        return mapper.selectByLike(begin, num);
+    }
+
+    @Override
+    public List<Image> selectByUidByTime(String uid) {
+        return mapper.selectByUidByTime(uid);
+    }
+
+    @Override
+    public List<Image> selectByScoreByPc(int begin,int num){
+        return mapper.selectByScoreByPc(begin, num);
+    }
+
+
+
+    @Override
     public void trailNumAddOne(String hid) {
         mapper.trailNumAddOne(hid);
     }
@@ -44,4 +71,6 @@ public class ImageImpl implements ImageService {
     public void likeNumSubOne(String hid) {
         mapper.likeNumSubOne(hid);
     }
+
+
 }

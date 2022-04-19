@@ -52,6 +52,8 @@ public class Image implements Serializable {
      * 喜欢次数
      */
     private Integer likenum;
+    private Integer score;
+
 
     /**
      * 审核状态
@@ -195,6 +197,19 @@ public class Image implements Serializable {
     public void setLikenum(Integer likenum) {
         this.likenum = likenum;
     }
+
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+
+
+
 
     /**
      * 审核状态

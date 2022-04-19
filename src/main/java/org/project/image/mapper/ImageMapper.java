@@ -13,8 +13,6 @@ import java.util.List;
 public interface ImageMapper {
 
 
-    List<Image> selectByRandom(int num);
-
     void trailNumAddOne(String hid);
 
     void likeNumAddOne(String hid);
@@ -24,6 +22,21 @@ public interface ImageMapper {
     int insert(Image record);
 
     Image selectByPrimaryKey(String id);
+
+
+
+    List<Image> selectByRandom(int num);
+
+    List<Image> selectByScore(int begin,int num);
+
+    List<Image> selectByTrail(int begin,int num);
+
+    List<Image> selectByLike(int begin,int num);
+
+    List<Image> selectByUidByTime(String uid);
+
+    List<Image> selectByScoreByPc(int begin,int num);
+
 
 
 

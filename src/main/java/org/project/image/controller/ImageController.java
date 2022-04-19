@@ -1,13 +1,11 @@
 package org.project.image.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import org.project.image.entity.History;
 import org.project.image.entity.Image;
 import org.project.image.entity.ResultObject;
 import org.project.image.service.*;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -75,21 +73,120 @@ public class ImageController {
         return resObject;
     }
 
+    /**
+     * 根据 综合分数 获取一定数量图片
+     * @return
+     */
+    @RequestMapping("score")
+    public ResultObject getImagesByScore(@RequestBody String jstr){
+        ResultObject resObject = new ResultObject();
+        JSONObject jobj = JSONObject.parseObject(jstr);
+        String uid = jobj.get("uid").toString();
+        int begin = (int)jobj.get("begin");
+        int limit = (int)jobj.get("limit");
+        List<Object> obj = new ArrayList<>();
+        List<Image> imageList = imageService.selectByScore(begin,limit);
+        for(Image image : imageList){
+            JSONObject jobj2 = new JSONObject();
+            jobj2.put("image",image);
+            jobj2.put("user",userService.selectByPrimaryKey(image.getUid()));
+            jobj2.put("tags",imageTagService.selectByHid(image.getHid()));
+            if(uid != null){
+                jobj2.put("record",imageLikeService.selectByPrimaryKey(uid,image.getHid()));
+            }
+
+            obj.add(jobj2);
+        }
+        resObject.setResult(true);
+        resObject.setMessage("查询成功");
+        resObject.setData(obj);
+        return resObject;
+    }
+
+    /**
+     * 根据浏览量获取一定数量图片
+     * @return
+     */
+    @RequestMapping("trail")
+    public ResultObject getImagesByTrail(@RequestBody String jstr){
+        ResultObject resObject = new ResultObject();
+        JSONObject jobj = JSONObject.parseObject(jstr);
+        String uid = jobj.get("uid").toString();
+        int begin = (int)jobj.get("begin");
+        int limit = (int)jobj.get("limit");
+        List<Object> obj = new ArrayList<>();
+        List<Image> imageList = imageService.selectByTrail(begin,limit);
+        for(Image image : imageList){
+            JSONObject jobj2 = new JSONObject();
+            jobj2.put("image",image);
+            jobj2.put("user",userService.selectByPrimaryKey(image.getUid()));
+            jobj2.put("tags",imageTagService.selectByHid(image.getHid()));
+            if(uid != null){
+                jobj2.put("record",imageLikeService.selectByPrimaryKey(uid,image.getHid()));
+            }
+            obj.add(jobj2);
+        }
+        resObject.setResult(true);
+        resObject.setMessage("查询成功");
+        resObject.setData(obj);
+        return resObject;
+    }
+
+
+    /**
+     * 图片上传记录
+     * @param uid
+     * @return
+     */
+    @RequestMapping("userhistory")
+    public ResultObject getHistory(@RequestParam String uid){
+        ResultObject resObject = new ResultObject();
+        try{
+            List<Object> obj = new ArrayList<>();
+            List<Image> list = imageService.selectByUidByTime(uid);
+            for(Image image : list){
+                JSONObject jobj = new JSONObject();
+                jobj.put("image",image);
+                jobj.put("user",userService.selectByPrimaryKey(image.getUid()));
+                jobj.put("tags",imageTagService.selectByHid(image.getHid()));
+                obj.add(jobj);
+            }
+            resObject.setData(obj);
+            resObject.setResult(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            resObject.setResult(false);
+            resObject.setMessage("操作异常，请稍后再试！");
+        }
+        return resObject;
+    }
+
+
+    /**
+     * 根据 综合分数 获取6张 图片 给首页的
+     * @return
+     */
+    @RequestMapping("carousel")
+    public ResultObject getImagesByScoreForCarousel(){
+        ResultObject resObject = new ResultObject();
+        List<Image> imageList = imageService.selectByScoreByPc(0,6);
+        resObject.setResult(true);
+        resObject.setMessage("查询成功");
+        resObject.setData(imageList);
+        return resObject;
+    }
+
+
+
+
+
+
     @RequestMapping("onetrail")
     public void oneTrail(@RequestBody String jstr){
         JSONObject jobj = JSONObject.parseObject(jstr);
         String hid = jobj.get("hid").toString();
         trailNumAddOne(hid);
     }
-//    @RequestMapping("onelike")
-//    public void oneLike(@RequestBody String jstr){
-//        JSONObject jobj = JSONObject.parseObject(jstr);
-//        String hid = jobj.get("hid").toString();
-//        likeNumAddOne(hid);
-//    }
-
-
-
 
 
     public void trailNumAddOne(String hid){

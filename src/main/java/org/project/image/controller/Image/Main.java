@@ -61,12 +61,11 @@ public class Main {
     }
     public String getShape(int width,int height){
         String shape = "Square";
-        if(width/height > 3/4){
+        if(width/height > 4/3){
             shape = "PC";
-        }else if(height/width > 3/4){
+        }else if(height/width > 4/3){
             shape = "Phone";
         }
-
         return shape;
     }
 }

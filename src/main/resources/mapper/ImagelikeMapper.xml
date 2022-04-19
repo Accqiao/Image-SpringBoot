@@ -43,6 +43,14 @@
         where  uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR}
     </select>
 
+    <select id="selectByUidByTime" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from imagelike
+        where  uid = #{uid,jdbcType=VARCHAR}
+        order by updateTime desc
+    </select>
+
 
 
 
