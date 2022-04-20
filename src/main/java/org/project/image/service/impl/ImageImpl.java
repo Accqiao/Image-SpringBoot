@@ -45,6 +45,11 @@ public class ImageImpl implements ImageService {
     }
 
     @Override
+    public List<Image> selectByCreateTime(int begin, int num) {
+        return mapper.selectByCreateTime(begin, num);
+    }
+
+    @Override
     public List<Image> selectByUidByTime(String uid) {
         return mapper.selectByUidByTime(uid);
     }

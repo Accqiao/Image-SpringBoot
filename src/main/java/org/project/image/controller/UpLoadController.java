@@ -8,9 +8,11 @@ import org.project.image.controller.Image.MoveFile;
 import org.project.image.entity.Image;
 import org.project.image.entity.ResultObject;
 import org.project.image.entity.Tags;
+import org.project.image.entity.User;
 import org.project.image.service.ImageService;
 import org.project.image.service.ImageTagService;
 import org.project.image.service.TagsService;
+import org.project.image.service.UserService;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,9 +39,57 @@ public class UpLoadController {
     private ImageService imageService;
     @Resource
     private ImageTagService imageTagService;
+    @Resource
+    private UserService userService;
 
 
     private String path = "src/main/resources/Image/";
+
+    @RequestMapping("/avatar")
+    public ResultObject uploadAvatar(@RequestParam("avatar") MultipartFile multipartFile,@RequestParam("uid") String uid){
+        ResultObject resultObj = new ResultObject();
+        try {
+            //文件名
+            String fileName = multipartFile.getOriginalFilename();
+            //后缀
+            String fileEnd = fileName.substring(fileName.lastIndexOf("."));
+            //修改文件名，确保文件名唯一,UUID.randomUUID()数字较长
+            //有这么长/例如：1DAF9E46-26F6-4F52-BBA5-422FD0E09270
+            String newFileName = UUID.randomUUID() + fileEnd;
+            //获取系统当前时间System.currentTimeMillis()当前的毫秒
+            //String newFileName = "img"+System.currentTimeMillis() + fileEnd;
+            String tempPath = "avatar/" + newFileName;
+            String newPath = path + tempPath;
+
+            System.out.println(tempPath + " // " + uid);
+
+            FileOutputStream fileOutputStream = new FileOutputStream(newPath);
+            //复制文件//输入流
+            FileCopyUtils.copy(multipartFile.getInputStream(),fileOutputStream);
+            fileOutputStream.close();
+
+            User user = new User();
+            user.setUid(uid);
+            user.setHead(tempPath);
+            int sign = userService.updateByPrimaryKeySelective(user);
+            if(sign == 1){
+                resultObj.setResult(true);
+                resultObj.setMessage("更新成功！");
+                resultObj.setData(tempPath);
+                return resultObj;
+            }else {
+                resultObj.setResult(false);
+                resultObj.setMessage("更新失败，请稍后再试！");
+                return resultObj;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            resultObj.setResult(false);
+            resultObj.setMessage("异常错误，请稍后再试！");
+            resultObj.setData(e);
+            return resultObj;
+        }
+    }
 
 
 
@@ -143,7 +193,7 @@ public class UpLoadController {
             FileCopyUtils.copy(multipartFile.getInputStream(),fileOutputStream);
             fileOutputStream.close();
 
-            return getImageInfo(tempPath);
+            return  getImageInfo(tempPath);
         } catch (IOException e) {
             e.printStackTrace();
             resultObj.setResult(false);

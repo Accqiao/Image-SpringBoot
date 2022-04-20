@@ -60,13 +60,20 @@
         where state = 'yes'
         order by likeNum desc limit #{begin},#{num}
     </select>
+    <select id="selectByCreateTime" resultType="org.project.image.entity.Image">
+        select
+        <include refid="Base_Column_List" />
+        from image
+        where state = 'yes'
+        order by createTime desc limit #{begin},#{num}
+    </select>
 
     <select id="selectByUidByTime" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from image
         where state = 'yes' and uid = #{uid,jdbcType=VARCHAR}
-        order by updateTime desc
+        order by createTime desc
     </select>
 
     <select id="selectByScoreByPc" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -76,6 +83,8 @@
         where width/height > 4/3
         order by score desc limit #{begin},#{num}
     </select>
+
+
 
 
 
@@ -122,6 +131,7 @@
         from image
         where  hid = #{hid,jdbcType=VARCHAR} 
     </select>
+
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from image

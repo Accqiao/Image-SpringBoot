@@ -104,7 +104,7 @@ public class ImageController {
     }
 
     /**
-     * 根据浏览量获取一定数量图片
+     * 根据 浏览量 获取一定数量图片
      * @return
      */
     @RequestMapping("trail")
@@ -131,6 +131,35 @@ public class ImageController {
         resObject.setData(obj);
         return resObject;
     }
+    /**
+     * 根据 上传时间 获取一定数量图片
+     * @return
+     */
+    @RequestMapping("createtime")
+    public ResultObject getImagesByTime(@RequestBody String jstr){
+        ResultObject resObject = new ResultObject();
+        JSONObject jobj = JSONObject.parseObject(jstr);
+        String uid = jobj.get("uid").toString();
+        int begin = (int)jobj.get("begin");
+        int limit = (int)jobj.get("limit");
+        List<Object> obj = new ArrayList<>();
+        List<Image> imageList = imageService.selectByCreateTime(begin,limit);
+        for(Image image : imageList){
+            JSONObject jobj2 = new JSONObject();
+            jobj2.put("image",image);
+            jobj2.put("user",userService.selectByPrimaryKey(image.getUid()));
+            jobj2.put("tags",imageTagService.selectByHid(image.getHid()));
+            if(uid != null){
+                jobj2.put("record",imageLikeService.selectByPrimaryKey(uid,image.getHid()));
+            }
+            obj.add(jobj2);
+        }
+        resObject.setResult(true);
+        resObject.setMessage("查询成功");
+        resObject.setData(obj);
+        return resObject;
+    }
+
 
 
     /**

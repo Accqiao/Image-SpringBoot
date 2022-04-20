@@ -35,4 +35,9 @@ public class UserImpl implements UserService {
     public int updateByPrimaryKey(User record) {
         return mapper.updateByPrimaryKey(record);
     }
+
+    @Override
+    public int updateByPrimaryKeySelective(User record) {
+        return mapper.updateByPrimaryKeySelective(record);
+    }
 }

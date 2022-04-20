@@ -33,6 +33,8 @@ public interface ImageMapper {
 
     List<Image> selectByLike(int begin,int num);
 
+    List<Image> selectByCreateTime(int begin,int num);
+
     List<Image> selectByUidByTime(String uid);
 
     List<Image> selectByScoreByPc(int begin,int num);

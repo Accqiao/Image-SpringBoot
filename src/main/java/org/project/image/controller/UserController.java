@@ -8,6 +8,7 @@ import org.project.image.service.PasswordService;
 import org.project.image.service.UserService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -66,6 +67,25 @@ public class UserController {
         }
     }
 
+
+    @RequestMapping("getUserInfo")
+    private ResultObject getUserInfo(@RequestParam String uid){
+        ResultObject resObject = new ResultObject();
+        try {
+            User user = userService.selectByPrimaryKey(uid);
+            System.out.println("更新用户信息："+user.getUid()+" , " + user.getName());
+
+            resObject.setResult(true);
+            resObject.setData(user);
+            return resObject;
+        }catch (Exception e){
+            e.printStackTrace();
+            resObject.setResult(false);
+            resObject.setMessage("Error!");
+            resObject.setData(e);
+            return resObject;
+        }
+    }
 
 
 
