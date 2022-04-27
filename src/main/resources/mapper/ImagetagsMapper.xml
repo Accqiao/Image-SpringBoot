@@ -35,9 +35,6 @@
     </delete>
 
 
-
-
-
     <insert id="insertSelective">
         insert into imagetags
         <trim prefix="(" suffix=")" suffixOverrides=",">

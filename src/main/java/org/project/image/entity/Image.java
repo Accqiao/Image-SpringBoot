@@ -42,6 +42,8 @@ public class Image implements Serializable {
      * 
      */
     private Integer height;
+    private String type;
+    private String color;
 
     /**
      * 浏览次数
@@ -208,8 +210,21 @@ public class Image implements Serializable {
     }
 
 
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type;
+    }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     /**
      * 审核状态
@@ -272,6 +287,9 @@ public class Image implements Serializable {
             && (this.getDescription() == null ? other.getDescription() == null : this.getDescription().equals(other.getDescription()))
             && (this.getWidth() == null ? other.getWidth() == null : this.getWidth().equals(other.getWidth()))
             && (this.getHeight() == null ? other.getHeight() == null : this.getHeight().equals(other.getHeight()))
+
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getColor() == null ? other.getColor() == null : this.getColor().equals(other.getColor()))
             && (this.getTrailnum() == null ? other.getTrailnum() == null : this.getTrailnum().equals(other.getTrailnum()))
             && (this.getLikenum() == null ? other.getLikenum() == null : this.getLikenum().equals(other.getLikenum()))
             && (this.getState() == null ? other.getState() == null : this.getState().equals(other.getState()))
@@ -290,6 +308,9 @@ public class Image implements Serializable {
         result = prime * result + ((getDescription() == null) ? 0 : getDescription().hashCode());
         result = prime * result + ((getWidth() == null) ? 0 : getWidth().hashCode());
         result = prime * result + ((getHeight() == null) ? 0 : getHeight().hashCode());
+
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+        result = prime * result + ((getColor() == null) ? 0 : getColor().hashCode());
         result = prime * result + ((getTrailnum() == null) ? 0 : getTrailnum().hashCode());
         result = prime * result + ((getLikenum() == null) ? 0 : getLikenum().hashCode());
         result = prime * result + ((getState() == null) ? 0 : getState().hashCode());
@@ -311,6 +332,8 @@ public class Image implements Serializable {
         sb.append(", description=").append(description);
         sb.append(", width=").append(width);
         sb.append(", height=").append(height);
+        sb.append(", type=").append(type);
+        sb.append(", color=").append(color);
         sb.append(", trailnum=").append(trailnum);
         sb.append(", likenum=").append(likenum);
         sb.append(", state=").append(state);

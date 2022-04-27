@@ -14,13 +14,9 @@ public interface ImagetagsMapper {
 
     int insert(Imagetags record);
 
-    List<Imagetags> selectByHid(String hid);
-
     int deleteByPrimaryKey(String hid,String tag);
 
-
-
-
+    List<Imagetags> selectByHid(String hid);
 
     int insertSelective(Imagetags record);
 

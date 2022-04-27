@@ -19,4 +19,5 @@ public interface ImageTagService {
 
     int deleteByPrimaryKey(String hid,String tag);
 
+
 }

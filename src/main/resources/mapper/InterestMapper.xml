@@ -20,6 +20,12 @@
         from interest
         where  id = #{id,jdbcType=OTHER} 
     </select>
+    <select id="selectByUid" parameterType="java.lang.String" resultType="org.project.image.entity.Interest">
+        select
+        <include refid="Base_Column_List" />
+        from interest
+        where  uid = #{uid,jdbcType=OTHER}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from interest

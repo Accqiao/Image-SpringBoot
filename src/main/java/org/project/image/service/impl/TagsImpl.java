@@ -17,7 +17,6 @@ public class TagsImpl implements TagsService {
 
     @Override
     public List<Tags> selectAll() {
-
         return mapper.selectAll();
     }
 

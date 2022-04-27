@@ -27,11 +27,6 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public List<User> selectAll() {
-        return null;
-    }
-
-    @Override
     public int updateByPrimaryKey(User record) {
         return mapper.updateByPrimaryKey(record);
     }
@@ -39,5 +34,16 @@ public class UserImpl implements UserService {
     @Override
     public int updateByPrimaryKeySelective(User record) {
         return mapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public List<User> selectUserbyPage(int page, int rows) {
+        int begin = (page-1) * rows ;
+        return mapper.selectUserbyPage(begin, rows);
+    }
+
+    @Override
+    public int selectUserCount() {
+        return mapper.selectUserCount();
     }
 }

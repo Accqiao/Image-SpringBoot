@@ -12,6 +12,8 @@
             <result property="description" column="description" jdbcType="VARCHAR"/>
             <result property="width" column="width" jdbcType="INTEGER"/>
             <result property="height" column="height" jdbcType="INTEGER"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="color" column="color" jdbcType="VARCHAR"/>
             <result property="trailnum" column="trailNum" jdbcType="INTEGER"/>
             <result property="likenum" column="likeNum" jdbcType="INTEGER"/>
             <result property="score" column="score" jdbcType="INTEGER"/>
@@ -23,7 +25,7 @@
     <sql id="Base_Column_List">
         hid,uid,title,
         href,description,width,
-        height,trailNum,likeNum,score,
+        height,type,color,trailNum,likeNum,score,
         state,updateTime,createTime
     </sql>
 
@@ -85,13 +87,6 @@
     </select>
 
 
-
-
-
-
-
-
-
     <update id="trailNumAddOne" parameterType="java.lang.String">
         update image
         set
@@ -118,18 +113,25 @@
     </update>
 
 
-
-
-
-
-
-
-
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from image
         where  hid = #{hid,jdbcType=VARCHAR} 
+    </select>
+    <select id="selectAllImage" resultType="org.project.image.entity.Image">
+        select
+        <include refid="Base_Column_List" />
+        from image
+    </select>
+    <select id="selectImageCount" resultType="java.lang.Integer">
+        select COUNT(*) from image
+    </select>
+    <select id="selectImageByPage" parameterType="java.lang.Integer" resultType="org.project.image.entity.Image">
+        select
+        <include refid="Base_Column_List" />
+        from image
+        order by createTime desc limit #{begin},#{rows}
     </select>
 
 
@@ -139,13 +141,11 @@
     </delete>
     <insert id="insert" keyColumn="hid" keyProperty="hid" parameterType="org.project.image.entity.Image" useGeneratedKeys="true">
         insert into image
-        ( hid,uid,title
-        ,href,description,width
-        ,height,trailNum,likeNum,score
-        ,state)
+        ( hid,uid,title,href,description,width,height,type,color,trailNum,likeNum,score,state)
+
         values (#{hid,jdbcType=VARCHAR},#{uid,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR}
         ,#{href,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{width,jdbcType=INTEGER}
-        ,#{height,jdbcType=INTEGER}
+        ,#{height,jdbcType=INTEGER},#{type,jdbcType=VARCHAR},#{color,jdbcType=VARCHAR}
         ,#{trailnum,jdbcType=INTEGER},#{likenum,jdbcType=INTEGER},#{score,jdbcType=INTEGER}
         ,#{state,jdbcType=VARCHAR})
     </insert>
@@ -163,6 +163,9 @@
                 <if test="description != null">description,</if>
                 <if test="width != null">width,</if>
                 <if test="height != null">height,</if>
+
+                <if test="type != null">typr,</if>
+                <if test="color != null">color,</if>
                 <if test="trailnum != null">trailNum,</if>
                 <if test="likenum != null">likeNum,</if>
                 <if test="state != null">state,</if>
@@ -177,6 +180,8 @@
                 <if test="description != null">#{description,jdbcType=VARCHAR},</if>
                 <if test="width != null">#{width,jdbcType=INTEGER},</if>
                 <if test="height != null">#{height,jdbcType=INTEGER},</if>
+                <if test="type != null">#{type,jdbcType=VARCHAR},</if>
+                <if test="color != null">#{color,jdbcType=VARCHAR},</if>
                 <if test="trailnum != null">#{trailnum,jdbcType=INTEGER},</if>
                 <if test="likenum != null">#{likenum,jdbcType=INTEGER},</if>
                 <if test="state != null">#{state,jdbcType=VARCHAR},</if>
@@ -205,6 +210,12 @@
                 <if test="height != null">
                     height = #{height,jdbcType=INTEGER},
                 </if>
+                <if test="type != null">
+                    type = #{type,jdbcType=VARCHAR},
+                    </if>
+                <if test="color != null">
+                    color = #{color,jdbcType=VARCHAR},
+                    </if>
                 <if test="trailnum != null">
                     trailNum = #{trailnum,jdbcType=INTEGER},
                 </if>
@@ -232,6 +243,8 @@
             description =  #{description,jdbcType=VARCHAR},
             width =  #{width,jdbcType=INTEGER},
             height =  #{height,jdbcType=INTEGER},
+            type = #{type,jdbcType=VARCHAR},
+            color = #{color,jdbcType=VARCHAR},
             trailNum =  #{trailnum,jdbcType=INTEGER},
             likeNum =  #{likenum,jdbcType=INTEGER},
             state =  #{state,jdbcType=VARCHAR},

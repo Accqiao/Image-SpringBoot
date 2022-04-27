@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.project.image.entity.History;
 import org.project.image.entity.Image;
 import org.project.image.entity.ResultObject;
+import org.project.image.entity.Tags;
 import org.project.image.service.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,8 @@ public class ImageController {
     private ImageTagService imageTagService;
     @Resource
     private ImageLikeService imageLikeService;
+    @Resource
+    private TagsService tagsService;
 
     /**
      * 随机获取一定数量图片和附属信息
@@ -131,6 +134,36 @@ public class ImageController {
         resObject.setData(obj);
         return resObject;
     }
+
+    /**
+     * 根据 浏览量 获取一定数量图片
+     * @return
+     */
+    @RequestMapping("like")
+    public ResultObject getImagesByLike(@RequestBody String jstr){
+        ResultObject resObject = new ResultObject();
+        JSONObject jobj = JSONObject.parseObject(jstr);
+        String uid = jobj.get("uid").toString();
+        int begin = (int)jobj.get("begin");
+        int limit = (int)jobj.get("limit");
+        List<Object> obj = new ArrayList<>();
+        List<Image> imageList = imageService.selectByLike(begin,limit);
+        for(Image image : imageList){
+            JSONObject jobj2 = new JSONObject();
+            jobj2.put("image",image);
+            jobj2.put("user",userService.selectByPrimaryKey(image.getUid()));
+            jobj2.put("tags",imageTagService.selectByHid(image.getHid()));
+            if(uid != null){
+                jobj2.put("record",imageLikeService.selectByPrimaryKey(uid,image.getHid()));
+            }
+            obj.add(jobj2);
+        }
+        resObject.setResult(true);
+        resObject.setMessage("查询成功");
+        resObject.setData(obj);
+        return resObject;
+    }
+
     /**
      * 根据 上传时间 获取一定数量图片
      * @return
@@ -160,10 +193,8 @@ public class ImageController {
         return resObject;
     }
 
-
-
     /**
-     * 图片上传记录
+     * 获取图片上传记录
      * @param uid
      * @return
      */
@@ -190,7 +221,6 @@ public class ImageController {
         return resObject;
     }
 
-
     /**
      * 根据 综合分数 获取6张 图片 给首页的
      * @return
@@ -205,33 +235,93 @@ public class ImageController {
         return resObject;
     }
 
+    /**
+     * 根据 上传时间 获取一定数量图片
+     * @return
+     */
+    @RequestMapping("bytag")
+    public ResultObject getImagesByn8Tags(@RequestBody String jstr){
+        ResultObject resObject = new ResultObject();
+        JSONObject jobj = JSONObject.parseObject(jstr);
+        String uid = jobj.get("uid").toString();
+        int begin = (int)jobj.get("begin");
+        int limit = (int)jobj.get("limit");
+        List<Object> obj = new ArrayList<>();
 
+        List<Image> imageList = imageService.selectByCreateTime(begin,limit);
 
+        for(Image image : imageList){
+            JSONObject jobj2 = new JSONObject();
+            jobj2.put("image",image);
+            jobj2.put("user",userService.selectByPrimaryKey(image.getUid()));
+            jobj2.put("tags",imageTagService.selectByHid(image.getHid()));
+            if(uid != null){
+                jobj2.put("record",imageLikeService.selectByPrimaryKey(uid,image.getHid()));
+            }
+            obj.add(jobj2);
+        }
+        resObject.setResult(true);
+        resObject.setMessage("查询成功");
+        resObject.setData(obj);
+        return resObject;
+    }
 
-
-
+    /**
+     * 足迹加一
+     * @param jstr
+     */
     @RequestMapping("onetrail")
     public void oneTrail(@RequestBody String jstr){
         JSONObject jobj = JSONObject.parseObject(jstr);
         String hid = jobj.get("hid").toString();
-        trailNumAddOne(hid);
-    }
-
-
-    public void trailNumAddOne(String hid){
         imageService.trailNumAddOne(hid);
-
-    }
-    public void likeNumAddOne(String hid){
-        imageService.likeNumAddOne(hid);
-    }
-    public void likeNumSubOne(String hid){
-        imageService.likeNumSubOne(hid);
     }
 
+    /**
+     * 获取分页户图片列表 by最新
+     * @return
+     */
+    @RequestMapping("page")
+    private Object getImagePage(@RequestParam int page,int rows){
+        JSONObject jobj = new JSONObject();
+        jobj.put("value",imageService.selectImageByPage(page, rows));
+        jobj.put("count",imageService.selectImageCount());
+        return jobj;
+    }
 
+    /**
+     * 获取图片的用户，标签信息
+     * @param hid
+     * @param uid
+     * @return
+     */
+    @RequestMapping("getImageInfo")
+    private Object getImageInfo(@RequestParam String hid, String uid){
+        JSONObject jobj = new JSONObject();
+        jobj.put("user",userService.selectByPrimaryKey(uid));
+        jobj.put("tags",imageTagService.selectByHid(hid));
+        jobj.put("alltags",tagsService.selectAllByLevelTags("2"));
+        return jobj;
+    }
 
-
-
-
+    /**
+     * 更新图片信息
+     * @param jstr
+     * @return
+     */
+    @RequestMapping("update")
+    private ResultObject UpdateImage(@RequestBody String jstr){
+        ResultObject resObject = new ResultObject();
+        JSONObject jobj = JSONObject.parseObject(jstr);
+        Image image = JSONObject.toJavaObject(jobj,Image.class);
+        int num =   imageService.updateByPrimaryKeySelective(image);
+        if( num == 0){
+            resObject.setResult(false);
+        }else {
+            Image newImage = imageService.selectByPrimaryKey(image.getHid());
+            resObject.setData(newImage);
+            resObject.setResult(true);
+        }
+        return resObject;
+    }
 }

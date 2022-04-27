@@ -2,6 +2,8 @@ package org.project.image.mapper;
 
 import org.project.image.entity.Interest;
 
+import java.util.List;
+
 /**
 * @author Accqiao
 * @description 针对表【interest】的数据库操作Mapper
@@ -11,13 +13,16 @@ import org.project.image.entity.Interest;
 
 public interface InterestMapper {
 
-    int deleteByPrimaryKey(String uid);
+    int deleteByPrimaryKey(String id);
 
     int insert(Interest record);
 
+    List<Interest> selectByUid(String uid);
+
+
     int insertSelective(Interest record);
 
-    Interest selectByPrimaryKey(String uid);
+    Interest selectByPrimaryKey(String id);
 
     int updateByPrimaryKeySelective(Interest record);
 

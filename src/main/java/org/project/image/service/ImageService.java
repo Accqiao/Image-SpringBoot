@@ -25,10 +25,13 @@ public interface ImageService {
 
     List<Image> selectByScoreByPc(int begin,int num);
 
+    List<Image> selectAllImage();
 
+    int updateByPrimaryKeySelective(Image record);
 
+    List<Image> selectImageByPage(int page,int rows);
 
-
+    int selectImageCount();
 
 
     void trailNumAddOne(String hid);

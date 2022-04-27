@@ -15,8 +15,13 @@ public class ImageTagImpl implements ImageTagService {
 
     @Override
     public int insert(Imagetags record) {
-        return 0;
+        return mapper.insert(record);
     }
+    @Override
+    public int deleteByPrimaryKey(String hid, String tag) {
+        return mapper.deleteByPrimaryKey(hid, tag);
+    }
+
 
     @Override
     public void insertList(List<String> taglist,String hid) {
@@ -35,8 +40,5 @@ public class ImageTagImpl implements ImageTagService {
         return mapper.selectByHid(hid);
     }
 
-    @Override
-    public int deleteByPrimaryKey(String hid, String tag) {
-        return mapper.deleteByPrimaryKey(hid, tag);
-    }
+
 }

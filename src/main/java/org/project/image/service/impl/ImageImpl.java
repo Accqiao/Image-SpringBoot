@@ -59,6 +59,26 @@ public class ImageImpl implements ImageService {
         return mapper.selectByScoreByPc(begin, num);
     }
 
+    @Override
+    public List<Image> selectAllImage() {
+        return mapper.selectAllImage();
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(Image record) {
+        return mapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public List<Image> selectImageByPage(int page, int rows) {
+        int begin = (page-1) * rows;
+        return mapper.selectImageByPage(begin,rows);
+    }
+
+    @Override
+    public int selectImageCount() {
+        return mapper.selectImageCount();
+    }
 
 
     @Override

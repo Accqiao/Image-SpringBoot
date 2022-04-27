@@ -12,7 +12,15 @@ import java.util.List;
 */
 public interface TagsMapper {
 
-    int deleteByPrimaryKey(Long id);
+    List<Tags> selectAll();
+
+    List<Tags> selectAllByLevelTags(String level);
+
+
+
+
+
+    int deleteByPrimaryKey(String id);
 
     int insert(Tags record);
 
@@ -27,9 +35,9 @@ public interface TagsMapper {
 
     Tags selectByPrimaryKey(String id);
 
-    List<Tags> selectAll();
 
-    List<Tags> selectAllByLevelTags(String level);
+
+
 
 
 }

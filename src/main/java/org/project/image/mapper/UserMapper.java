@@ -3,6 +3,8 @@ package org.project.image.mapper;
 
 import org.project.image.entity.User;
 
+import java.util.List;
+
 /**
 * @author Accqiao
 * @description 针对表【userinfo】的数据库操作Mapper
@@ -22,5 +24,9 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    List<User> selectUserbyPage(int begin,int rows);
+
+    int selectUserCount();
 
 }

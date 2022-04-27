@@ -16,7 +16,6 @@
         state
     </sql>
 
-
     <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
@@ -30,6 +29,7 @@
     </select>
 
 
+
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
@@ -37,7 +37,7 @@
         where  tag = #{tag,jdbcType=VARCHAR} 
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from tags
         where  tag = #{tag,jdbcType=VARCHAR} 
     </delete>

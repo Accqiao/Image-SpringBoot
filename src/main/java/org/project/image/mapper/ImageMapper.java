@@ -23,8 +23,6 @@ public interface ImageMapper {
 
     Image selectByPrimaryKey(String id);
 
-
-
     List<Image> selectByRandom(int num);
 
     List<Image> selectByScore(int begin,int num);
@@ -39,7 +37,11 @@ public interface ImageMapper {
 
     List<Image> selectByScoreByPc(int begin,int num);
 
+    List<Image> selectAllImage();
 
+    List<Image> selectImageByPage(int begin,int rows);
+
+    int selectImageCount();
 
 
 

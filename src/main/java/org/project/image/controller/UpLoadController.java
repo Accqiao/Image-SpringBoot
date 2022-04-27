@@ -116,40 +116,35 @@ public class UpLoadController {
             image.setHeight(height);
             int width = (int)jobj.get("width");
             image.setWidth(width);
-
+            String color = jobj.get("color").toString();
+            image.setColor(color);
+            String shape = jobj.get("shape").toString();
+            image.setType(shape);
+            //标签
+            List<String> tags =  JSONObject.parseArray(jobj.get("tags").toString(),String.class);
 
             //默认值
-
             image.setTrailnum(0);
             image.setLikenum(0);
             image.setScore(0);
             image.setState("yes");
 
-
-            //标签
-            String color = jobj.get("color").toString();
-            String shape = jobj.get("shape").toString();
-            List<String> tags =  JSONObject.parseArray(jobj.get("tags").toString(),String.class);
-            tags.add(color);
-            tags.add(shape);
-
-
             String tempPath = jobj.get("path").toString();
             String newPath = tempPath.replace("temp","image");
             MoveFile moveFile = new MoveFile();
             Boolean resMove = moveFile.toMoveFile(path,tempPath,newPath);
-            System.out.println("1、移动图片："+ tempPath);
+//            System.out.println("1、移动图片："+ tempPath);
             if(resMove){//图片移动成功
                 image.setHref(tempPath.replace("temp","image"));
                 int resImg = imageService.insert(image);
                 if (resImg == 1){//图片数据库添加成功
-                    System.out.println("2、添加数据库成功");
+//                    System.out.println("2、添加数据库成功");
                     imageTagService.insertList(tags,hid);//添加标签
-                    System.out.println("3、添加标签");
+//                    System.out.println("3、添加标签");
                     resultObj.setMessage("上传成功！");
                     resultObj.setResult(true);
                 }else {//移动回去
-                    System.out.println("4、数据库失败，返回图片："+ newPath);
+//                    System.out.println("4、数据库失败，返回图片："+ newPath);
                     moveFile.toMoveFile(path,newPath,tempPath);
                     resultObj.setResult(false);
                     resultObj.setMessage("保存异常，请稍后再试！");
@@ -258,14 +253,15 @@ public class UpLoadController {
      * @return
      */
     public String getShape(int width,int height){
-        String shape = "Square";
-        if(width/height > 3/4){
-            shape = "PC";
-        }else if(height/width > 3/4){
-            shape = "Phone";
+        float rate = (float)width / height;
+        System.out.println(rate);
+        if(rate <= 0.666){
+            return "Phone";
+        }else if(rate > 1.333){
+            return "PC";
+        }else {
+            return "Square";
         }
-
-        return shape;
     }
 
     /**
@@ -281,6 +277,27 @@ public class UpLoadController {
         }
         System.out.println("该图片已存在！！");
         return false;
+    }
+
+
+
+    @RequestMapping("test")
+    public int Test() throws IOException {
+        Color colorClass = new Color();
+        List<Image> imageList = imageService.selectAllImage();
+        for(Image img : imageList){
+            String shape = getShape(img.getWidth(),img.getHeight());
+            FileInputStream fileInputStream = new  FileInputStream(path+img.getHref());
+            BufferedImage image = ImageIO.read( fileInputStream);
+            String color = colorClass.getAvgRGB(image);
+            Image im = new Image();
+            im.setHid(img.getHid());
+            im.setColor(color);
+            im.setType(shape);
+            int num =   imageService.updateByPrimaryKeySelective(im);
+            System.out.println(num+","+color+","+shape+",宽"+img.getWidth()+",高"+img.getHeight());
+        }
+        return 123;
     }
 
 

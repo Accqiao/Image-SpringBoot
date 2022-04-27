@@ -11,11 +11,15 @@ public interface UserService {
 
     User selectByPrimaryKey(String uid);
 
-    List<User> selectAll();
 
     int updateByPrimaryKey(User record);
 
     int updateByPrimaryKeySelective(User record);
+
+    List<User> selectUserbyPage(int page,int rows);
+
+    int selectUserCount();
+
 
 
 }
