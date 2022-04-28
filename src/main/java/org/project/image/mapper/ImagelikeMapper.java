@@ -18,10 +18,7 @@ public interface ImagelikeMapper {
 
     Imagelike selectByPrimaryKey(String uid,String hid);
 
-
     List<Imagelike> selectByUidByTime(String uid);
-
-
 
     int deleteByPrimaryKey(Long id);
 
@@ -29,10 +26,13 @@ public interface ImagelikeMapper {
 
     int insertSelective(Imagelike record);
 
-
-
     int updateByPrimaryKeySelective(Imagelike record);
 
     int updateByPrimaryKey(Imagelike record);
 
+    List<String> selectDifferentHid();
+
+    List<String> selectUidByHid(String hid);
+
+    List<String> selectHidByUid(String uid);
 }

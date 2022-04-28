@@ -33,4 +33,19 @@ public class ImageLikeImpl implements ImageLikeService {
     public List<Imagelike> selectByUidByTime(String uid) {
         return mapper.selectByUidByTime(uid);
     }
+
+    @Override
+    public List<String> selectDifferentHid() {
+        return mapper.selectDifferentHid();
+    }
+
+    @Override
+    public List<String> selectUidByHid(String hid) {
+        return mapper.selectUidByHid(hid);
+    }
+
+    @Override
+    public List<String> selectHidByUid(String uid) {
+        return mapper.selectHidByUid(uid);
+    }
 }

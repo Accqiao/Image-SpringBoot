@@ -29,4 +29,6 @@ public interface UserMapper {
 
     int selectUserCount();
 
+    List<String> selectAllUid();
+
 }

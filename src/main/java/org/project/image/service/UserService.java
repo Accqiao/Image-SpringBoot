@@ -20,6 +20,7 @@ public interface UserService {
 
     int selectUserCount();
 
+    List<String> selectAllUid();
 
 
 }

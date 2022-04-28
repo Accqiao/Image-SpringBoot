@@ -14,4 +14,10 @@ public interface ImageLikeService {
     Imagelike selectByPrimaryKey(String uid,String hid);
 
     List<Imagelike> selectByUidByTime(String uid);
+
+    List<String> selectDifferentHid();
+
+    List<String> selectUidByHid(String hid);
+
+    List<String> selectHidByUid(String uid);
 }

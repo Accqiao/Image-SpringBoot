@@ -46,4 +46,9 @@ public class UserImpl implements UserService {
     public int selectUserCount() {
         return mapper.selectUserCount();
     }
+
+    @Override
+    public List<String> selectAllUid() {
+        return mapper.selectAllUid();
+    }
 }

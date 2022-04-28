@@ -1,10 +1,7 @@
 package org.project.image.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import org.project.image.entity.History;
-import org.project.image.entity.Image;
-import org.project.image.entity.ResultObject;
-import org.project.image.entity.Tags;
+import org.project.image.entity.*;
 import org.project.image.service.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +23,8 @@ public class ImageController {
     private ImageLikeService imageLikeService;
     @Resource
     private TagsService tagsService;
+    @Resource
+    private RecommendService recommendService;
 
     /**
      * 随机获取一定数量图片和附属信息
@@ -240,16 +239,14 @@ public class ImageController {
      * @return
      */
     @RequestMapping("bytag")
-    public ResultObject getImagesByn8Tags(@RequestBody String jstr){
+    public ResultObject getImagesByTags(@RequestBody String jstr){
         ResultObject resObject = new ResultObject();
         JSONObject jobj = JSONObject.parseObject(jstr);
         String uid = jobj.get("uid").toString();
         int begin = (int)jobj.get("begin");
         int limit = (int)jobj.get("limit");
         List<Object> obj = new ArrayList<>();
-
         List<Image> imageList = imageService.selectByCreateTime(begin,limit);
-
         for(Image image : imageList){
             JSONObject jobj2 = new JSONObject();
             jobj2.put("image",image);
@@ -324,4 +321,36 @@ public class ImageController {
         }
         return resObject;
     }
+
+
+    @RequestMapping("byRecommend")
+    public ResultObject getImagesByRecommend(@RequestBody String jstr){
+        ResultObject resObject = new ResultObject();
+        JSONObject jobj = JSONObject.parseObject(jstr);
+        String uid = jobj.get("uid").toString();
+        int begin = (int)jobj.get("begin");
+        int limit = (int)jobj.get("limit");
+
+        List<Object> obj = new ArrayList<>();
+        List<Userrecommend> userrecommendList = recommendService.selectRecommendByUid(uid,begin,limit);
+
+        for(Userrecommend us : userrecommendList){
+            String hid = us.getHid();
+            JSONObject jobj2 = new JSONObject();
+            jobj2.put("image",imageService.selectByPrimaryKey(hid));
+            jobj2.put("user",userService.selectByPrimaryKey(uid));
+            jobj2.put("tags",imageTagService.selectByHid(hid));
+            jobj2.put("record",imageLikeService.selectByPrimaryKey(uid,hid));
+            jobj2.put("recommend",us.getRecommend());
+            obj.add(jobj2);
+        }
+        resObject.setResult(true);
+        resObject.setMessage("查询成功");
+        resObject.setData(obj);
+        return resObject;
+
+    }
+
+
+
 }

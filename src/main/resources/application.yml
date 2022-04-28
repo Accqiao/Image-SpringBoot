@@ -37,5 +37,5 @@ mybatis-plus:
   # 实体类存放位置，好像不写也行
   type-aliases-package: org.project.image.entity
   # # 打印sql日志
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

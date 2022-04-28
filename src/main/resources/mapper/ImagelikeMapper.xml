@@ -50,9 +50,21 @@
         where  uid = #{uid,jdbcType=VARCHAR}
         order by updateTime desc
     </select>
-
-
-
+    <select id="selectUidByHid" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        uid
+        from imagelike
+        where  hid = #{hid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectDifferentHid" resultType="java.lang.String">
+        select distinct hid from imagelike
+    </select>
+    <select id="selectHidByUid" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        hid
+        from imagelike
+        where  uid = #{uid,jdbcType=VARCHAR}
+    </select>
 
 
     <insert id="insert">

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.image.mapper.UsersimilarityMapper">
+
+    <resultMap id="BaseResultMap" type="org.project.image.entity.Usersimilarity">
+            <id property="userb" column="userB" jdbcType="VARCHAR"/>
+            <id property="usera" column="userA" jdbcType="VARCHAR"/>
+            <result property="similarity" column="Similarity" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        userB,userA,Similarity
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from usersimilarity
+        where  userB = #{userb,jdbcType=VARCHAR} AND userA = #{usera,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from usersimilarity
+        where  userB = #{userb,jdbcType=VARCHAR} AND userA = #{usera,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert">
+        insert into usersimilarity
+        ( userB,userA,Similarity
+        )
+        values (#{userb,jdbcType=VARCHAR},#{usera,jdbcType=VARCHAR},#{similarity,jdbcType=DOUBLE}
+        )
+    </insert>
+    <insert id="insertSelective">
+        insert into usersimilarity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="userb != null">userB,</if>
+                <if test="usera != null">userA,</if>
+                <if test="similarity != null">Similarity,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="userb != null">#{userb,jdbcType=VARCHAR},</if>
+                <if test="usera != null">#{usera,jdbcType=VARCHAR},</if>
+                <if test="similarity != null">#{similarity,jdbcType=DOUBLE},</if>
+        </trim>
+    </insert>
+    <insert id="insertOrUpdate"  parameterType="org.project.image.entity.Usersimilarity">
+        insert into usersimilarity
+        ( userB,userA,Similarity)
+        values (#{userb,jdbcType=VARCHAR},#{usera,jdbcType=VARCHAR},#{similarity,jdbcType=DOUBLE})
+        ON DUPLICATE KEY UPDATE
+        Similarity = similarity
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="org.project.image.entity.Usersimilarity">
+        update usersimilarity
+        <set>
+                <if test="similarity != null">
+                    Similarity = #{similarity,jdbcType=DOUBLE},
+                </if>
+        </set>
+        where   userB = #{userb,jdbcType=VARCHAR} AND userA = #{usera,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.project.image.entity.Usersimilarity">
+        update usersimilarity
+        set 
+            Similarity =  #{similarity,jdbcType=DOUBLE}
+        where   userB = #{userb,jdbcType=VARCHAR} AND userA = #{usera,jdbcType=VARCHAR} 
+    </update>
+</mapper>
