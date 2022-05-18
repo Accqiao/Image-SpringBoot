@@ -1,6 +1,7 @@
 package org.project.image.service;
 
 
+import org.project.image.entity.History;
 import org.project.image.entity.Imagelike;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface ImageLikeService {
     Imagelike selectByPrimaryKey(String uid,String hid);
 
     List<Imagelike> selectByUidByTime(String uid);
+
+    List<Imagelike> selectByUidByTimeByLimit(String uid, int begin, int rows);
 
     List<String> selectDifferentHid();
 

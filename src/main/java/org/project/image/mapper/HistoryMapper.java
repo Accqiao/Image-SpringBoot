@@ -20,6 +20,8 @@ public interface HistoryMapper {
 
     List<History> selectByUidByTime(String uid);
 
+    List<History> selectByUidByTimeByLimit(String uid,int begin,int rows);
+
     History selectByPrimaryKey(String uid,String hid);
 
 

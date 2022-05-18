@@ -35,99 +35,107 @@ public class Task_UserCF {
         int userNum = users.size();
 
         //建立用户稀疏矩阵，用于用户相似度计算【相似度矩阵】
-        int[][] sparseMatrix = new int[userNum][userNum];
+        int[][] User_SparseMatrix = new int[userNum][userNum];
 
         //存储每一个用户对应的不同物品总数  eg: A 3
-        Map<String, Integer> userItemLength = new HashMap<>();
+        Map<String, Integer> User_Item_Length = new HashMap<>();
 
         //建立物品到用户的倒排表 eg: a A B
-        Map<String, Set<String>> itemUserCollection = new HashMap<>();
 
-
+        Map<String, Set<String>> Item_User_MAP = new HashMap<>();
         Set<String> items = new HashSet<>();//辅助存储物品集合
-        Map<String, Integer> userID = new HashMap<>();//辅助存储每一个用户的用户ID映射
-        Map<Integer, String> idUser = new HashMap<>();//辅助存储每一个ID对应的用户映射
+        Map<String, Integer> User_ID_MAP = new HashMap<>();//辅助存储每一个用户的用户ID映射
+        Map<Integer, String> ID_User_MAP = new HashMap<>();//辅助存储每一个ID对应的用户映射
 
-        for (int i = 0; i < userNum; i++) {
+        for (int i = 0; i < users.size(); i++) {
             String user = users.get(i);
             List<String> imageLikes = imageLikeService.selectHidByUid(user);
             int length = imageLikes.size();
-            userItemLength.put(user, length);//eg: A 3
-            userID.put(user, i);//用户ID与稀疏矩阵建立对应关系
-            idUser.put(i, user);
-
+            //用户与物品数量 列表
+            User_Item_Length.put(user, length);
+            //建立对应关系
+            ID_User_MAP.put(i, user);
+            User_ID_MAP.put(user, i);
+            //创建物品-用户的倒排表
             for(int j = 0; j < imageLikes.size(); j ++){
                 String item = imageLikes.get(j);
-
-                if(items.contains(item)){//如果已经包含对应的物品--用户映射，直接添加对应的用户
-                    itemUserCollection.get(item).add(user);
-                }else{//否则创建对应物品--用户集合映射
+                if(items.contains(item)){
+                    //存在 物品用户 映射则添加对应用户
+                    Item_User_MAP.get(item).add(user);
+                }else{
+                    //不存在则创建 物品用户 映射
                     items.add(item);
-                    itemUserCollection.put(item, new HashSet<String>());//创建物品--用户倒排关系
-                    itemUserCollection.get(item).add(user);
+                    Item_User_MAP.put(item, new HashSet<String>());//创建物品--用户倒排关系
+                    Item_User_MAP.get(item).add(user);
                 }
             }
-
         }
-//        System.out.println(itemUserCollection.toString());
 
         //计算相似度矩阵【稀疏】
-        Set<Map.Entry<String, Set<String>>> entrySet = itemUserCollection.entrySet();
-        Iterator<Map.Entry<String, Set<String>>> iterator = entrySet.iterator();
-        while(iterator.hasNext()){
-            Set<String> commonUsers = iterator.next().getValue();
-            for (String user_u : commonUsers) {
-                for (String user_v : commonUsers) {
+        Set<Map.Entry<String, Set<String>>> SetEntryClass = Item_User_MAP.entrySet();
+        Iterator<Map.Entry<String, Set<String>>> entryIterator = SetEntryClass.iterator();
+        while(entryIterator.hasNext()){
+            Set<String> Com_Users = entryIterator.next().getValue();
+            for (String user_u : Com_Users) {
+                for (String user_v : Com_Users) {
                     if(user_u.equals(user_v)){
                         continue;
                     }
-                    sparseMatrix[userID.get(user_u)][userID.get(user_v)] += 1;//计算用户u与用户v都有正反馈的物品总数
+
+                    User_SparseMatrix[User_ID_MAP.get(user_u)][User_ID_MAP.get(user_v)] += 1;
                 }
             }
         }
-//        System.out.println(userItemLength.toString());
 
-        recommendService.deleteAll();//清除历史推荐信息
-        for(String recommendUser : users ){
-//            System.out.println("位置"+userID.get(recommendUser));
-            //计算用户之间的相似度【余弦相似性】
-            List<Usersimilarity> usersimiList = new ArrayList<>();
-            int recommendUserId = userID.get(recommendUser);
-            for (int j = 0;j < sparseMatrix.length; j++) {
-                if(j != recommendUserId){
-                    Double similarity = sparseMatrix[recommendUserId][j]/Math.sqrt(userItemLength.get(idUser.get(recommendUserId))*userItemLength.get(idUser.get(j)));
+        //清除历史推荐信息
+        recommendService.deleteAll();
+        for(String Curr_User : users ){
+            //计算用户之间的余弦相似度
+            List<Usersimilarity> User_SimilarityList = new ArrayList<>();
+            int Curr_User_Id = User_ID_MAP.get(Curr_User);
+            for (int j = 0;j < User_SparseMatrix.length; j++) {
+                if(j != Curr_User_Id){
+                    Double similarity =
+                            User_SparseMatrix[Curr_User_Id][j]
+                            /Math.sqrt(
+                                    User_Item_Length.get(ID_User_MAP.get(Curr_User_Id))
+                                            * User_Item_Length.get(ID_User_MAP.get(j))
+                            );
                     Usersimilarity us = new Usersimilarity();
-                    us.setUsera(idUser.get(recommendUserId));
-                    us.setUserb(idUser.get(j));
+                    us.setUsera(ID_User_MAP.get(Curr_User_Id));
+                    us.setUserb(ID_User_MAP.get(j));
                     us.setSimilarity(similarity);
-                    usersimiList.add(us);
-                    //用户之间的相似度
-//                    System.out.println(idUser.get(recommendUserId)+"--"+idUser.get(j)+"相似度:"+sparseMatrix[recommendUserId][j]/Math.sqrt(userItemLength.get(idUser.get(recommendUserId))*userItemLength.get(idUser.get(j))));
+                    //用户之间的相似度  保存至相似度列表
+                    User_SimilarityList.add(us);
                 }
             }
-            //保存进数据库
-            similarityService.insertList(usersimiList);
+            //记录用户相似度信息
+            similarityService.insertList(User_SimilarityList);
 
-
-            List<Userrecommend> userrecommendList = new ArrayList<>();
-            //计算指定用户recommendUser的物品推荐度
-            for(String item: items){//遍历每一件物品
-                Set<String> users2 = itemUserCollection.get(item);//得到购买当前物品的所有用户集合
-                if(!users2.contains(recommendUser)){//如果被推荐用户没有购买当前物品，则进行推荐度计算
-                    double itemRecommendDegree = 0.0;
-                    for(String user: users2){
-                        itemRecommendDegree += sparseMatrix[userID.get(recommendUser)][userID.get(user)]/Math.sqrt(userItemLength.get(recommendUser)*userItemLength.get(user));//推荐度计算
+            List<Userrecommend> User_RecommendList = new ArrayList<>();
+            //需要计算得分总物品列表
+            for(String item: items){
+                //需要进行比较的用户集合
+                Set<String> Compare_Users = Item_User_MAP.get(item);
+                //如果用户已收藏该物品，则不计算，否则计算推荐度
+                if(!Compare_Users.contains(Curr_User)){
+                    double recommendDegree = 0.0;
+                    for(String user: Compare_Users){
+                        //通过比较计算该物品的推荐度
+                        recommendDegree = recommendDegree + User_SparseMatrix[User_ID_MAP.get(Curr_User)][User_ID_MAP.get(user)]
+                                /Math.sqrt(User_Item_Length.get(Curr_User)
+                                * User_Item_Length.get(user));
                     }
-                    Userrecommend us = new Userrecommend();
-                    us.setHid(item);
-                    us.setUid(recommendUser);
-                    us.setRecommend(itemRecommendDegree);
-                    userrecommendList.add(us);
-                    //推荐图片 推荐度
-                    System.out.println("The item "+item+" for "+recommendUser +"'s recommended degree:"+itemRecommendDegree);
+                    Userrecommend ur = new Userrecommend();
+                    ur.setHid(item);
+                    ur.setUid(Curr_User);
+                    ur.setRecommend(recommendDegree);
+                    //推荐图片 推荐度 保存至列表
+                    User_RecommendList.add(ur);
+
                 }
             }
-            recommendService.insertList(userrecommendList);
+            recommendService.insertList(User_RecommendList);
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.project.image.service.impl;
 
+import org.project.image.entity.History;
 import org.project.image.entity.Imagelike;
 import org.project.image.mapper.ImageMapper;
 import org.project.image.mapper.ImagelikeMapper;
@@ -32,6 +33,11 @@ public class ImageLikeImpl implements ImageLikeService {
     @Override
     public List<Imagelike> selectByUidByTime(String uid) {
         return mapper.selectByUidByTime(uid);
+    }
+
+    @Override
+    public List<Imagelike> selectByUidByTimeByLimit(String uid, int begin, int rows) {
+        return mapper.selectByUidByTimeByLimit(uid, begin, rows);
     }
 
     @Override

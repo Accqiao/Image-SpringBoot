@@ -55,9 +55,6 @@ public class ImageLikeController {
                     System.out.println("用户："+uid+"收藏？变/不喜欢：["+hid+",图片]");
                     imageService.likeNumSubOne(hid);//收藏量 - 1 ;
                 }
-
-
-
                 JSONObject jobj2 = new JSONObject();
                 jobj2.put("image",imageService.selectByPrimaryKey(hid));
                 jobj2.put("record",imageLikeService.selectByPrimaryKey(uid,hid));
@@ -111,11 +108,11 @@ public class ImageLikeController {
     }
 
     @RequestMapping("userhistory")
-    public ResultObject getHistory(@RequestParam String uid){
+    public ResultObject getHistory(@RequestParam String uid, int begin , int rows){
         ResultObject resObject = new ResultObject();
         try{
             List<Object> obj = new ArrayList<>();
-            List<Imagelike> list = imageLikeService.selectByUidByTime(uid);
+            List<Imagelike> list = imageLikeService.selectByUidByTimeByLimit(uid,begin,rows);
             for(Imagelike imgLike : list){
                 JSONObject jobj = new JSONObject();
                 Image image = imageService.selectByPrimaryKey(imgLike.getHid());
@@ -123,7 +120,6 @@ public class ImageLikeController {
                 jobj.put("record",imgLike);
                 jobj.put("user",userService.selectByPrimaryKey(image.getUid()));
                 jobj.put("tags",imageTagService.selectByHid(image.getHid()));
-
                 obj.add(jobj);
             }
             resObject.setData(obj);
@@ -135,5 +131,34 @@ public class ImageLikeController {
         }
         return resObject;
     }
+
+
+    @RequestMapping("historyList")
+    public ResultObject getHistoryList(@RequestParam String uid, int begin , int rows){
+        ResultObject resObject = new ResultObject();
+        try{
+            List<Object> obj = new ArrayList<>();
+            List<Imagelike> list = imageLikeService.selectByUidByTimeByLimit(uid, begin, rows);
+            for(Imagelike imgLike : list){
+                JSONObject jobj = new JSONObject();
+                Image image = imageService.selectByPrimaryKey(imgLike.getHid());
+                jobj.put("image",image);
+                jobj.put("record",imgLike);
+                jobj.put("user",userService.selectByPrimaryKey(image.getUid()));
+                jobj.put("tags",imageTagService.selectByHid(image.getHid()));
+                obj.add(jobj);
+            }
+            resObject.setData(obj);
+            resObject.setResult(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            resObject.setResult(false);
+            resObject.setMessage("操作异常，请稍后再试！");
+        }
+        return resObject;
+    }
+
+
+
 
 }

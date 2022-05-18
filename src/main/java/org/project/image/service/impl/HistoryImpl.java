@@ -33,4 +33,9 @@ public class HistoryImpl implements HistoryService {
     public List<History> selectByUidByTime(String uid) {
         return mapper.selectByUidByTime(uid);
     }
+
+    @Override
+    public List<History> selectByUidByTimeByLimit(String uid, int begin, int rows) {
+        return mapper.selectByUidByTimeByLimit(uid, begin, rows);
+    }
 }

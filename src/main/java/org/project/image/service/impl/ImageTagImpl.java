@@ -22,6 +22,11 @@ public class ImageTagImpl implements ImageTagService {
         return mapper.deleteByPrimaryKey(hid, tag);
     }
 
+    @Override
+    public List<Imagetags> selectByTag(String tag,int begin,int rows) {
+        return mapper.selectByTag(tag,begin,rows);
+    }
+
 
     @Override
     public void insertList(List<String> taglist,String hid) {

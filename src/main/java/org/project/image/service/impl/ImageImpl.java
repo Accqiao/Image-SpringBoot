@@ -30,23 +30,23 @@ public class ImageImpl implements ImageService {
     }
 
     @Override
-    public List<Image> selectByScore(int begin, int num) {
-        return mapper.selectByScore(begin, num);
+    public List<Image> selectByScore(int begin, int rows) {
+        return mapper.selectByScore(begin, rows);
     }
 
     @Override
-    public List<Image> selectByTrail(int begin, int num) {
-        return mapper.selectByTrail(begin, num);
+    public List<Image> selectByTrail(int begin, int rows) {
+        return mapper.selectByTrail(begin, rows);
     }
 
     @Override
-    public List<Image> selectByLike(int begin, int num) {
-        return mapper.selectByLike(begin, num);
+    public List<Image> selectByLike(int begin, int rows) {
+        return mapper.selectByLike(begin, rows);
     }
 
     @Override
-    public List<Image> selectByCreateTime(int begin, int num) {
-        return mapper.selectByCreateTime(begin, num);
+    public List<Image> selectByCreateTime(int begin, int rows) {
+        return mapper.selectByCreateTime(begin, rows);
     }
 
     @Override
@@ -54,6 +54,10 @@ public class ImageImpl implements ImageService {
         return mapper.selectByUidByTime(uid);
     }
 
+    @Override
+    public List<Image> selectByUidByTimeByLimit(String uid, int begin, int rows) {
+        return mapper.selectByUidByTimeByLimit(uid, begin, rows);
+    }
     @Override
     public List<Image> selectByScoreByPc(int begin,int num){
         return mapper.selectByScoreByPc(begin, num);

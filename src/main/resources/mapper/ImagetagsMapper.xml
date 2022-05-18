@@ -28,6 +28,13 @@
         from imagetags
         where  hid = #{hid,jdbcType=VARCHAR} AND state = 'yes'
     </select>
+    <select id="selectByTag" resultType="org.project.image.entity.Imagetags">
+        select
+        <include refid="Base_Column_List" />
+        from imagetags
+        where  tag = #{tag,jdbcType=VARCHAR} AND state = 'yes'
+        limit #{begin},#{rows}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from imagetags

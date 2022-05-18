@@ -24,7 +24,7 @@
         select
         <include refid="Base_Column_List" />
         from userrecommend
-        where  uid = #{uid,jdbcType=VARCHAR}
+        where  uid = #{uid,jdbcType=VARCHAR} and recommend > 0.4
         order by recommend desc limit #{begin},#{num}
     </select>
 

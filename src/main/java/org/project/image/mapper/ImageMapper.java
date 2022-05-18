@@ -25,15 +25,17 @@ public interface ImageMapper {
 
     List<Image> selectByRandom(int num);
 
-    List<Image> selectByScore(int begin,int num);
+    List<Image> selectByScore(int begin,int rows);
 
-    List<Image> selectByTrail(int begin,int num);
+    List<Image> selectByTrail(int begin,int rows);
 
-    List<Image> selectByLike(int begin,int num);
+    List<Image> selectByLike(int begin,int rows);
 
-    List<Image> selectByCreateTime(int begin,int num);
+    List<Image> selectByCreateTime(int begin,int rows);
 
     List<Image> selectByUidByTime(String uid);
+
+    List<Image> selectByUidByTimeByLimit(String uid, int begin, int rows);
 
     List<Image> selectByScoreByPc(int begin,int num);
 

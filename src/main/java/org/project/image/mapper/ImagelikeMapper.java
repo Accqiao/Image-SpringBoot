@@ -1,5 +1,6 @@
 package org.project.image.mapper;
 
+import org.project.image.entity.History;
 import org.project.image.entity.Imagelike;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public interface ImagelikeMapper {
     Imagelike selectByPrimaryKey(String uid,String hid);
 
     List<Imagelike> selectByUidByTime(String uid);
+
+    List<Imagelike> selectByUidByTimeByLimit(String uid, int begin, int rows);
 
     int deleteByPrimaryKey(Long id);
 

@@ -65,6 +65,14 @@
         from imagelike
         where  uid = #{uid,jdbcType=VARCHAR}
     </select>
+    <select id="selectByUidByTimeByLimit" resultType="org.project.image.entity.Imagelike">
+        select
+        <include refid="Base_Column_List" />
+        from imagelike
+        where  uid = #{uid,jdbcType=VARCHAR}
+        order by updateTime desc
+        limit #{begin},#{rows}
+    </select>
 
 
     <insert id="insert">

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.image.mapper.ConcernMapper">
+
+    <resultMap id="BaseResultMap" type="org.project.image.entity.Concern">
+            <id property="uid" column="uid" jdbcType="VARCHAR"/>
+            <id property="uuid" column="uuid" jdbcType="VARCHAR"/>
+            <result property="state" column="state" jdbcType="VARCHAR"/>
+            <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        uid,uuid,state,
+        updateTime,createTime
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from concern
+        where  uid = #{uid,jdbcType=VARCHAR} AND uuid = #{uuid,jdbcType=VARCHAR} 
+    </select>
+    <select id="selectUserByUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from concern
+        where  uid = #{uid,jdbcType=VARCHAR}
+        limit #{begin},#{rows}
+    </select>
+    <select id="selectAllUserByUser" resultType="org.project.image.entity.Concern">
+        select
+        <include refid="Base_Column_List" />
+        from concern
+        where  uid = #{uid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectConcernConut" resultType="java.lang.Integer">
+        select COUNT(*) from concern
+    </select>
+
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from concern
+        where  uid = #{uid,jdbcType=VARCHAR} AND uuid = #{uuid,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert">
+        insert into concern
+        ( uid,uuid,state)
+        values (#{uid,jdbcType=VARCHAR},#{uuid,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective">
+        insert into concern
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="uid != null">uid,</if>
+                <if test="uuid != null">uuid,</if>
+                <if test="state != null">state,</if>
+                <if test="updatetime != null">updateTime,</if>
+                <if test="createtime != null">createTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="uid != null">#{uid,jdbcType=VARCHAR},</if>
+                <if test="uuid != null">#{uuid,jdbcType=VARCHAR},</if>
+                <if test="state != null">#{state,jdbcType=VARCHAR},</if>
+                <if test="updatetime != null">#{updatetime,jdbcType=TIMESTAMP},</if>
+                <if test="createtime != null">#{createtime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.project.image.entity.Concern">
+        update concern
+        <set>
+                <if test="state != null">
+                    state = #{state,jdbcType=VARCHAR},
+                </if>
+                <if test="updatetime != null">
+                    updateTime = #{updatetime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="createtime != null">
+                    createTime = #{createtime,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   uid = #{uid,jdbcType=VARCHAR} AND uuid = #{uuid,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.project.image.entity.Concern">
+        update concern
+        set 
+            state =  #{state,jdbcType=VARCHAR},
+            updateTime =  #{updatetime,jdbcType=TIMESTAMP},
+            createTime =  #{createtime,jdbcType=TIMESTAMP}
+        where   uid = #{uid,jdbcType=VARCHAR} AND uuid = #{uuid,jdbcType=VARCHAR} 
+    </update>
+</mapper>

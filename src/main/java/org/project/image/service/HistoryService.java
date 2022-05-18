@@ -13,4 +13,6 @@ public interface HistoryService {
     History selectByPrimaryKey(String uid,String hid);
 
     List<History> selectByUidByTime(String uid);
+
+    List<History> selectByUidByTimeByLimit(String uid,int begin,int rows);
 }

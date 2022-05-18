@@ -45,7 +45,7 @@
         <include refid="Base_Column_List" />
         from image
         where state = 'yes'
-        order by score desc limit #{begin},#{num}
+        order by score desc limit #{begin},#{rows}
     </select>
 
     <select id="selectByTrail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -53,21 +53,21 @@
         <include refid="Base_Column_List" />
         from image
         where state = 'yes'
-        order by trailNum desc limit #{begin},#{num}
+        order by trailNum desc limit #{begin},#{rows}
     </select>
     <select id="selectByLike" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from image
         where state = 'yes'
-        order by likeNum desc limit #{begin},#{num}
+        order by likeNum desc limit #{begin},#{rows}
     </select>
-    <select id="selectByCreateTime" resultType="org.project.image.entity.Image">
+    <select id="selectByCreateTime" parameterType="java.lang.Integer" resultType="org.project.image.entity.Image">
         select
         <include refid="Base_Column_List" />
         from image
         where state = 'yes'
-        order by createTime desc limit #{begin},#{num}
+        order by createTime desc limit #{begin},#{rows}
     </select>
 
     <select id="selectByUidByTime" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -76,6 +76,14 @@
         from image
         where state = 'yes' and uid = #{uid,jdbcType=VARCHAR}
         order by createTime desc
+    </select>
+    <select id="selectByUidByTimeByLimit" resultType="org.project.image.entity.Image">
+        select
+        <include refid="Base_Column_List" />
+        from image
+        where state = 'yes' and uid = #{uid,jdbcType=VARCHAR}
+        order by createTime desc limit #{begin},#{rows}
+
     </select>
 
     <select id="selectByScoreByPc" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -133,6 +141,7 @@
         from image
         order by createTime desc limit #{begin},#{rows}
     </select>
+
 
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

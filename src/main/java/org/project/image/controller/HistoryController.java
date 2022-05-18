@@ -62,4 +62,34 @@ public class HistoryController {
         }
         return resObject;
     }
+
+
+    @RequestMapping("historyList")
+    public ResultObject getHistoryList(@RequestParam String uid, int begin , int rows){
+        ResultObject resObject = new ResultObject();
+        try{
+            List<Object> obj = new ArrayList<>();
+            List<History> list = historyService.selectByUidByTimeByLimit(uid, begin, rows);
+            for(History his : list){
+                JSONObject jobj = new JSONObject();
+                Image image = imageService.selectByPrimaryKey(his.getHid());
+                jobj.put("image",image);
+                jobj.put("record",his);
+                jobj.put("user",userService.selectByPrimaryKey(image.getUid()));
+                jobj.put("tags",imageTagService.selectByHid(image.getHid()));
+                obj.add(jobj);
+            }
+            resObject.setData(obj);
+            resObject.setResult(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            resObject.setResult(false);
+            resObject.setMessage("操作异常，请稍后再试！");
+        }
+        return resObject;
+    }
+
+
+
+
 }

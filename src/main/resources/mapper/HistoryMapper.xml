@@ -60,6 +60,14 @@
         from history
         where  uid = #{uid,jdbcType=VARCHAR} AND hid = #{hid,jdbcType=VARCHAR} 
     </select>
+    <select id="selectByUidByTimeByLimit" resultType="org.project.image.entity.History">
+        select
+        <include refid="Base_Column_List" />
+        from history
+        where  uid = #{uid,jdbcType=VARCHAR}
+        order by updateTime desc limit #{begin},#{rows}
+
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from history

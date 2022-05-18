@@ -19,5 +19,7 @@ public interface ImageTagService {
 
     int deleteByPrimaryKey(String hid,String tag);
 
+    List<Imagetags> selectByTag(String tag ,int begin,int rows);
+
 
 }
